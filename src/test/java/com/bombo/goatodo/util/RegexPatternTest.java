@@ -99,4 +99,34 @@ class RegexPatternTest {
         // then
         Assertions.assertThat(isMatch).isTrue();
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"email", "email@com", "email..", "email,com"})
+    @DisplayName("적절하지 않은 도메인 네임이 들어오면 실패한다.")
+    void DomainNamePatternTestEx(String inputDomainName) {
+        // given
+
+        // when
+        boolean isMatch = Pattern.compile(RegexPattern.DOMAIN_NAME_REGEX)
+                .matcher(inputDomainName)
+                .matches();
+
+        // then
+        Assertions.assertThat(isMatch).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"email.com", "email.co.kr", "email.edu", "email.net"})
+    @DisplayName("적절한 도메인 네임이 들어오면 정규식이 통과한다.")
+    void correctDomainNamePatternTest(String inputDomainName) {
+        // given
+
+        // when
+        boolean isMatch = Pattern.compile(RegexPattern.DOMAIN_NAME_REGEX)
+                .matcher(inputDomainName)
+                .matches();
+
+        // then
+        Assertions.assertThat(isMatch).isTrue();
+    }
 }
