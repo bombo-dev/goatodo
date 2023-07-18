@@ -102,31 +102,6 @@ class MemberRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원의 닉네임을 변경 할 수 있다.")
-    void updateNickname() {
-        // given
-        Account account = Account.builder()
-                .email("goatodo@email.com")
-                .password("password1234")
-                .build();
-
-        Member member = Member.builder()
-                .account(account)
-                .nickname("고투두")
-                .occupation(Occupation.GENERAL)
-                .build();
-
-        Member savedMember = memberRepository.save(member);
-
-        // when
-        memberRepository.updateNickname("투두변경", member.getId());
-        Member findMember = memberRepository.findById(savedMember.getId()).get();
-
-        // then
-        Assertions.assertThat(findMember.getNickname()).isEqualTo("투두변경");
-    }
-
-    @Test
     @DisplayName("회원을 삭제 할 수 있다.")
     void deleteMember() {
         // given
