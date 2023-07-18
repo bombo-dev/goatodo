@@ -26,7 +26,7 @@ class AccountTest {
     @ParameterizedTest
     @ValueSource(strings = {"email", "email@email", "email.com", "", " "})
     @DisplayName("계정 Email은 Email 표기법에 맞게 작성되지 않는다면 위반된 검증사항이 존재한다.")
-    void accountEmailValidationFail(String inputEmail) {
+    void accountEmailNotMatchPatternTest(String inputEmail) {
         // given
         Account account = Account.builder()
                 .email(inputEmail)
@@ -66,7 +66,7 @@ class AccountTest {
     @ParameterizedTest
     @ValueSource(strings = {"abcd123", "abcdefghijk1234567890", "", " "})
     @DisplayName("계정 password의 길이가 적절한 8자 미만 20자 초과라면 위반된 검증사항이 존재한다.")
-    void accountPasswordLengthValidationFail(String inputPassword) {
+    void accountPasswordOutOfRangeTest(String inputPassword) {
         // given
         Account account = Account.builder()
                 .email("goatodo@example.com")
@@ -89,7 +89,7 @@ class AccountTest {
     @ParameterizedTest
     @ValueSource(strings = {"abcdefgh", "12345678"})
     @DisplayName("계정 password가 영문+숫자 조합이 아니라면 위반된 검증사항이 존재한다.")
-    void accountPasswordPatternValidationFail(String inputPassword) {
+    void accountPasswordNotMathPatternTest(String inputPassword) {
         // given
         Account account = Account.builder()
                 .email("goatodo@example.com")
