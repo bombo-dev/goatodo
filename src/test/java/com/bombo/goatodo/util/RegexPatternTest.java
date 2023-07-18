@@ -69,4 +69,34 @@ class RegexPatternTest {
         // then
         Assertions.assertThat(isMatch).isTrue();
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"email", "email@email", "email.com"})
+    @DisplayName("적절하지 않은 이메일 패턴이 들어오면 정규식이 실패한다.")
+    void emailEx(String inputEmail) {
+        // given
+
+        // when
+        boolean isMatch = Pattern.compile(RegexPattern.EMAIL_REGEX)
+                .matcher(inputEmail)
+                .matches();
+
+        // then
+        Assertions.assertThat(isMatch).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"email@email.com", "email@email.co.kr", "email@email.net"})
+    @DisplayName("적절한 이메일 패턴이 들어오면 정규식이 성공한다.")
+    void correctEmailTest(String inputEmail) {
+        // given
+
+        // when
+        boolean isMatch = Pattern.compile(RegexPattern.EMAIL_REGEX)
+                .matcher(inputEmail)
+                .matches();
+
+        // then
+        Assertions.assertThat(isMatch).isTrue();
+    }
 }
