@@ -12,7 +12,7 @@ class RegexPatternTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"abc1234", "abcdefghijk1234567890"})
-    @DisplayName("숫자의 범위가 8자이상 20자 이내가 아니면 정규식이 일치하지 않는다.")
+    @DisplayName("비밀번호 숫자의 범위가 8자미만 20자 초과면 정규식이 일치하지 않는다.")
     void passwordExOutOfRangeLength(String input) {
         // given
 
@@ -26,7 +26,7 @@ class RegexPatternTest {
     }
 
     @Test
-    @DisplayName("영문만 있으면 정규식이 일치하지 않는다.")
+    @DisplayName("비밀번호가 영문만 있으면 정규식이 일치하지 않는다.")
     void passwordExWithOnlyAlpha() {
         // given
         String input = "password";
@@ -41,7 +41,7 @@ class RegexPatternTest {
     }
 
     @Test
-    @DisplayName("숫자만 있으면 정규식이 일치하지 않는다.")
+    @DisplayName("비밀번호가 숫자만 있으면 정규식이 일치하지 않는다.")
     void passwordExWithOnlyNumeric() {
         // given
         String input = "123456789";
@@ -57,7 +57,7 @@ class RegexPatternTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"abcd1234", "abcdefghij1234567890", "password1234", "Password1234", "q1w2e3r4!@"})
-    @DisplayName("영문자 + 숫자와 조합과 8자이상 20자 이내면 정규식이 통과한다.")
+    @DisplayName("비밀번호가 영문자 + 숫자와 조합과 8자이상 20자 이내면 정규식이 통과한다.")
     void correctPasswordTest(String input) {
         // given
 
@@ -69,5 +69,4 @@ class RegexPatternTest {
         // then
         Assertions.assertThat(isMatch).isTrue();
     }
-
 }
