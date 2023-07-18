@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import java.util.Iterator;
 import java.util.Set;
 
 class AccountTest {
@@ -34,16 +33,14 @@ class AccountTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Account>> validatedSet = validator.validate(account);
-
-        Iterator<ConstraintViolation<Account>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Account> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Account>> constraintViolation = validator.validate(account);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
+        Assertions.assertThat(constraintViolation).isNotEmpty();
 
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("적절한 이메일 양식대로 입력해주세요. ex) goatodo@example.com");
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("적절한 이메일 양식대로 입력해주세요. ex) goatodo@example.com");
     }
 
     @ParameterizedTest
@@ -74,16 +71,14 @@ class AccountTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Account>> validatedSet = validator.validate(account);
-
-        Iterator<ConstraintViolation<Account>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Account> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Account>> constraintViolation = validator.validate(account);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
+        Assertions.assertThat(constraintViolation).isNotEmpty();
 
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("영문자+숫자, 8자 이상 20자 이내이여야 합니다.");
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("영문자+숫자, 8자 이상 20자 이내이여야 합니다.");
     }
 
     @ParameterizedTest
@@ -97,16 +92,14 @@ class AccountTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Account>> validatedSet = validator.validate(account);
-
-        Iterator<ConstraintViolation<Account>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Account> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Account>> constraintViolation = validator.validate(account);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
+        Assertions.assertThat(constraintViolation).isNotEmpty();
 
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("영문자+숫자, 8자 이상 20자 이내이여야 합니다.");
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("영문자+숫자, 8자 이상 20자 이내이여야 합니다.");
     }
 
     @ParameterizedTest

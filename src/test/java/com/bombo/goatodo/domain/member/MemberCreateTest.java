@@ -10,7 +10,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import java.util.Iterator;
 import java.util.Set;
 
 class MemberCreateTest {
@@ -35,15 +34,13 @@ class MemberCreateTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
-
-        Iterator<ConstraintViolation<Member>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Member> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("회원의 계정은 null 일 수 없습니다.");
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("회원의 계정은 null 일 수 없습니다.");
     }
 
     @Test
@@ -61,15 +58,13 @@ class MemberCreateTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
-
-        Iterator<ConstraintViolation<Member>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Member> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("회원의 닉네임은 null 이거나 공백 일 수 없습니다.");
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("회원의 닉네임은 null 이거나 공백 일 수 없습니다.");
     }
 
     @Test
@@ -88,15 +83,13 @@ class MemberCreateTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
-
-        Iterator<ConstraintViolation<Member>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Member> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("회원의 닉네임은 null 이거나 공백 일 수 없습니다.");
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("회원의 닉네임은 null 이거나 공백 일 수 없습니다.");
     }
 
     @ParameterizedTest
@@ -116,15 +109,14 @@ class MemberCreateTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
-
-        Iterator<ConstraintViolation<Member>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Member> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("닉네임은 2글자 이상 15자 이내여야 합니다.");
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("닉네임은 2글자 이상 15자 이내여야 합니다.");
     }
 
     @ParameterizedTest
@@ -165,15 +157,14 @@ class MemberCreateTest {
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
-
-        Iterator<ConstraintViolation<Member>> validatedIterator = validatedSet.iterator();
-        ConstraintViolation<Member> constraintViolation = validatedIterator.next();
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isNotEmpty();
-        Assertions.assertThat(constraintViolation.getMessage())
-                .isEqualTo("회원의 직업은 null 일 수 없습니다.");
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("회원의 직업은 null 일 수 없습니다.");
     }
 
     @Test
