@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 class MemberRepositoryTest {
@@ -124,5 +125,53 @@ class MemberRepositoryTest {
 
         // then
         Assertions.assertThat(findMembers).isEmpty();
+    }
+
+    @Test
+    @DisplayName("닉네임으로 회원을 조회 할 수 있다.")
+    void findByNicknameTest() {
+        // given
+        Account account = Account.builder()
+                .email("goatodo@email.com")
+                .password("password1234")
+                .build();
+
+        Member member = Member.builder()
+                .account(account)
+                .nickname("고투두")
+                .occupation(Occupation.GENERAL)
+                .build();
+
+        Member savedMember = memberRepository.save(member);
+
+        // when
+        Optional<Member> findMember = memberRepository.findByNickname(savedMember.getNickname());
+
+        // then
+        Assertions.assertThat(findMember).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("이메일로 회원을 조회 할 수 있다.")
+    void findByEmailTest() {
+        // given
+        Account account = Account.builder()
+                .email("goatodo@email.com")
+                .password("password1234")
+                .build();
+
+        Member member = Member.builder()
+                .account(account)
+                .nickname("고투두")
+                .occupation(Occupation.GENERAL)
+                .build();
+
+        Member savedMember = memberRepository.save(member);
+
+        // when
+        Optional<Member> findMember = memberRepository.findByAccount_Email(savedMember.getAccount().getEmail());
+
+        // then
+        Assertions.assertThat(findMember).isNotEmpty();
     }
 }
