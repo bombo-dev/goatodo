@@ -3,9 +3,9 @@ package com.bombo.goatodo.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public final class Converter {
+public final class FormatConverter {
 
-    private Converter() {
+    private FormatConverter() {
 
     }
 

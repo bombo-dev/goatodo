@@ -2,7 +2,7 @@ package com.bombo.goatodo.domain.member.service.dto;
 
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.util.Converter;
+import com.bombo.goatodo.util.FormatConverter;
 
 public record MemberResponse(
         Long id,
@@ -20,8 +20,8 @@ public record MemberResponse(
                 member.getAccount().getPassword(),
                 member.getNickname(),
                 member.getOccupation(),
-                Converter.convertLocalDateTimeToString(member.getCreatedAt()),
-                Converter.convertLocalDateTimeToString(member.getUpdatedAt())
+                FormatConverter.convertLocalDateTimeToString(member.getCreatedAt()),
+                FormatConverter.convertLocalDateTimeToString(member.getUpdatedAt())
         );
     }
 }
