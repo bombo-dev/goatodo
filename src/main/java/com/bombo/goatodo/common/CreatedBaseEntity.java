@@ -2,6 +2,7 @@ package com.bombo.goatodo.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +17,7 @@ public abstract class CreatedBaseEntity {
     @CreatedDate
     protected LocalDateTime createdAt;
 
+    @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
     }
