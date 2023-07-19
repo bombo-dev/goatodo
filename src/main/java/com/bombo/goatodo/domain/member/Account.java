@@ -18,7 +18,7 @@ public class Account {
 
     @Pattern(regexp = RegexPattern.EMAIL_REGEX,
             message = "적절한 이메일 양식대로 입력해주세요. ex) goatodo@example.com")
-    @Column(name = "email", length = 50, nullable = false)
+    @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
     @Pattern(regexp = RegexPattern.PASSWORD_REGEX, message = "영문자+숫자, 8자 이상 20자 이내이여야 합니다.")
@@ -29,6 +29,14 @@ public class Account {
     public Account(String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public boolean equalsEmail(String email) {
+        return this.email.equals(email);
+    }
+
+    public boolean equalsPassword(String password) {
+        return this.password.equals(password);
     }
 
     @Override
