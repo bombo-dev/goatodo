@@ -27,7 +27,7 @@ public class DefaultMemberService implements MemberService {
     @Override
     public MemberResponse save(MemberCreateRequest memberCreateRequest) {
         Member requestMember = memberCreateRequest.toEntity();
-        duplicateMember(requestMember);
+        validateDuplicatedMember(requestMember);
         Member savedMember = memberRepository.save(requestMember);
         return new MemberResponse(savedMember);
     }
@@ -70,7 +70,7 @@ public class DefaultMemberService implements MemberService {
     @Transactional
     @Override
     public void updateProfile(MemberUpdateRequest memberUpdateRequest) {
-        duplicateNickname(memberUpdateRequest.nickname());
+        validateDuplicatedNickname(memberUpdateRequest.nickname());
 
         Member findMember = memberRepository.findById(memberUpdateRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
@@ -78,19 +78,19 @@ public class DefaultMemberService implements MemberService {
         findMember.changeProfile(memberUpdateRequest.nickname(), memberUpdateRequest.occupation());
     }
 
-    private void duplicateMember(Member requestMember) {
-        duplicateNickname(requestMember.getNickname());
-        duplicateEmail(requestMember.getAccount().getEmail());
+    private void validateDuplicatedMember(Member requestMember) {
+        validateDuplicatedNickname(requestMember.getNickname());
+        validateDuplicatedEmail(requestMember.getAccount().getEmail());
     }
 
-    private void duplicateEmail(String email) {
+    private void validateDuplicatedEmail(String email) {
         memberRepository.findByAccount_Email(email)
                 .ifPresent(member -> {
                     throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_EMAIL);
                 });
     }
 
-    private void duplicateNickname(String nickname) {
+    private void validateDuplicatedNickname(String nickname) {
         memberRepository.findByNickname(nickname)
                 .ifPresent(member -> {
                     throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_NICKNAME);
