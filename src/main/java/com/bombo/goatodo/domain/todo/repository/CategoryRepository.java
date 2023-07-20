@@ -16,5 +16,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findSelectingCategory(Long id);
 
     @Query("SELECT c FROM Category c LEFT JOIN FETCH c.member m WHERE m.id = :id AND c.tag = :tag")
-    Optional<Category> findByMemberIdAndTag(Long id, String tag);
+    Optional<Category> existSameMemberCategory(Long id, String tag);
+
+    @Query("SELECT c FROM Category c WHERE c.member IS NULL AND c.tag = :tag")
+    Optional<Category> existSameCommonCategory(String tag);
 }

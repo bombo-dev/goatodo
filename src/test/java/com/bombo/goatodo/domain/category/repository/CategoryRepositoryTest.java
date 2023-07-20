@@ -131,6 +131,35 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("동일한 공통 카테고리를 조회 할 수 있다.")
+    void findCommonCategoryWithTagTest() {
+        // given
+        Category categoryA = Category.builder()
+                .tag("수업")
+                .build();
+
+        Category categoryB = Category.builder()
+                .tag("스터디")
+                .build();
+
+        Member savedMember = memberRepository.save(member);
+        Category categoryC = Category.builder()
+                .tag("수업")
+                .member(savedMember)
+                .build();
+
+        // when
+        categoryRepository.save(categoryA);
+        categoryRepository.save(categoryB);
+        categoryRepository.save(categoryC);
+
+        Optional<Category> findCategory = categoryRepository.existSameCommonCategory("수업");
+
+        // then
+        Assertions.assertThat(findCategory).isNotEmpty();
+    }
+
+    @Test
     @DisplayName("회원이 선택할 카테고리를 조회 할 수 있다.")
     void findCategoryForSelectTest() {
         // given
@@ -172,7 +201,7 @@ class CategoryRepositoryTest {
 
         // when
         categoryRepository.save(category);
-        Optional<Category> findCategory = categoryRepository.findByMemberIdAndTag(savedMember.getId(), category.getTag());
+        Optional<Category> findCategory = categoryRepository.existSameMemberCategory(savedMember.getId(), category.getTag());
 
         // then
         Assertions.assertThat(findCategory).isNotEmpty();
