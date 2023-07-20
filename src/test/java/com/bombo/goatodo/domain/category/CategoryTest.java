@@ -59,14 +59,13 @@ class CategoryTest {
         Assertions.assertThat(constraintViolations).isEmpty();
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = {"놉", "20자가 초과하는 태그를 한 번 만들어보았습니다."})
-    @DisplayName("카테고리 태그가 2자 미만 20자를 초과하면 안된다.")
-    void categoryTagOutOfRangeTest(String tag) {
+    @Test
+    @DisplayName("카테고리 태그가 20자를 초과하면 안된다.")
+    void categoryTagOutOfRangeTest() {
         // given
         Category category = Category.builder()
                 .id(0L)
-                .tag(tag)
+                .tag("20자가 초과하는 태그를 한 번 만들어보았습니다.")
                 .member(member)
                 .build();
 

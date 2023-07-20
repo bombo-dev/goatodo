@@ -23,8 +23,8 @@ public class Category {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank
-    @Size(min = 2, max = 20)
+    @NotBlank(message = "카테고리는 공백 일 수 없습니다.")
+    @Size(max = 20, message = "카테고리는 20자 이내여야 합니다.")
     @Column(name = "tag", length = 20, nullable = false)
     private String tag;
 
