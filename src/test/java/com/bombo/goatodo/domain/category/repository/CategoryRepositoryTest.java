@@ -1,10 +1,11 @@
 package com.bombo.goatodo.domain.category.repository;
 
-import com.bombo.goatodo.domain.category.Category;
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
 import com.bombo.goatodo.domain.member.repository.MemberRepository;
+import com.bombo.goatodo.domain.todo.Category;
+import com.bombo.goatodo.domain.todo.repository.CategoryRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

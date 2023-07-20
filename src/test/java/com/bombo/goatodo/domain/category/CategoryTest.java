@@ -3,6 +3,7 @@ package com.bombo.goatodo.domain.category;
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
+import com.bombo.goatodo.domain.todo.Category;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;

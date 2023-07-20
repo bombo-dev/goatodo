@@ -1,4 +1,4 @@
-package com.bombo.goatodo.domain.category;
+package com.bombo.goatodo.domain.todo;
 
 import com.bombo.goatodo.domain.member.Member;
 import jakarta.persistence.*;

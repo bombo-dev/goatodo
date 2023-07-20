@@ -1,6 +1,6 @@
-package com.bombo.goatodo.domain.category.repository;
+package com.bombo.goatodo.domain.todo.repository;
 
-import com.bombo.goatodo.domain.category.Category;
+import com.bombo.goatodo.domain.todo.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
