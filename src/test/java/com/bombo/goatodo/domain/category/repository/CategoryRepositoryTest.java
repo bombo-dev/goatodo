@@ -160,6 +160,25 @@ class CategoryRepositoryTest {
     }
 
     @Test
+    @DisplayName("회원이 생성한 카테고리를 아이디와 이름으로 조회 할 수 있다.")
+    void findCategoryByTagAndMemberIdTest() {
+        // given
+
+        Member savedMember = memberRepository.save(member);
+        Category category = Category.builder()
+                .tag("일상")
+                .member(savedMember)
+                .build();
+
+        // when
+        categoryRepository.save(category);
+        Optional<Category> findCategory = categoryRepository.findByMemberIdAndTag(savedMember.getId(), category.getTag());
+
+        // then
+        Assertions.assertThat(findCategory).isNotEmpty();
+    }
+
+    @Test
     @DisplayName("회원이 생성한 카테고리를 삭제 할 수 있다.")
     void deleteCategoryTag() {
         // given
