@@ -1,6 +1,6 @@
 package com.bombo.goatodo.domain.member;
 
-import com.bombo.goatodo.common.BaseEntity;
+import com.bombo.goatodo.global.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
