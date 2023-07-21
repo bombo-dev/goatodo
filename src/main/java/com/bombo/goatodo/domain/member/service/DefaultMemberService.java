@@ -10,6 +10,7 @@ import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
+import com.bombo.goatodo.global.exception.RoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,7 +63,7 @@ public class DefaultMemberService implements MemberService {
         }
 
         if (!findMember.isSameEmail(memberAccountRequest.email())) {
-            throw new IllegalStateException("이메일이 일치하지 않아 패스워드를 변경 할 수 없습니다.");
+            throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         }
         findMember.changePassword(memberAccountRequest.password());
     }
@@ -76,6 +77,15 @@ public class DefaultMemberService implements MemberService {
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         findMember.changeProfile(memberUpdateRequest.nickname(), memberUpdateRequest.occupation());
+    }
+
+    @Transactional
+    @Override
+    public void deleteMember(Long id) {
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        memberRepository.delete(findMember);
     }
 
     private void validateDuplicatedMember(Member requestMember) {

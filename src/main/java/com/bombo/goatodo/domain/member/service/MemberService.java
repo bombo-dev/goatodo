@@ -17,4 +17,6 @@ public interface MemberService {
     void updatePassword(MemberAccountRequest memberAccountRequest);
 
     void updateProfile(MemberUpdateRequest memberUpdateRequest);
+
+    void deleteMember(Long id);
 }

@@ -3,6 +3,7 @@ package com.bombo.goatodo.domain.member.controller.dto;
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
+import com.bombo.goatodo.domain.member.Role;
 import com.bombo.goatodo.util.RegexPattern;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,13 +25,17 @@ public record MemberCreateRequest(
         String nickname,
 
         @NotNull(message = "회원의 직업은 null 일 수 없습니다.")
-        Occupation occupation
+        Occupation occupation,
+
+        @NotNull(message = "회원의 권한은 null 일 수 없습니다.")
+        Role role
 ) {
     public Member toEntity() {
         return Member.builder()
                 .account(createAccount(emailId, domainName, password))
                 .nickname(nickname)
                 .occupation(occupation)
+                .role(role)
                 .build();
     }
 

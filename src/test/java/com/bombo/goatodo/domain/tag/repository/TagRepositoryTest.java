@@ -3,6 +3,7 @@ package com.bombo.goatodo.domain.tag.repository;
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
+import com.bombo.goatodo.domain.member.Role;
 import com.bombo.goatodo.domain.member.repository.MemberRepository;
 import com.bombo.goatodo.domain.todo.Tag;
 import com.bombo.goatodo.domain.todo.TagType;
@@ -39,6 +40,7 @@ class TagRepositoryTest {
                 .account(account)
                 .nickname("닉네임")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
     }
 

@@ -36,13 +36,20 @@ public class Member extends BaseEntity {
     @Column(name = "occupation", nullable = false)
     private Occupation occupation;
 
+    @NotNull(message = "회원의 역할은 null 일 수 없습니다.")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @Builder
     public Member(@NotNull Account account,
                   @NotBlank String nickname,
-                  @NotNull Occupation occupation) {
+                  @NotNull Occupation occupation,
+                  @NotNull Role role) {
         this.account = account;
         this.nickname = nickname;
         this.occupation = occupation;
+        this.role = role;
     }
 
     public void changePassword(String password) {
@@ -64,5 +71,9 @@ public class Member extends BaseEntity {
 
     public boolean isSameMember(Account account) {
         return this.account.equals(account);
+    }
+
+    public boolean isAdmin() {
+        return this.role == Role.ADMIN;
     }
 }

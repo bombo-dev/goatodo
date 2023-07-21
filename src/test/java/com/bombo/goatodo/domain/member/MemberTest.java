@@ -12,7 +12,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.Set;
 
-class MemberCreateTest {
+class MemberTest {
 
 
     private static LocalValidatorFactoryBean validator;
@@ -31,6 +31,7 @@ class MemberCreateTest {
         Member member = Member.builder()
                 .nickname("봄보")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -55,6 +56,7 @@ class MemberCreateTest {
         Member member = Member.builder()
                 .account(account)
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -80,6 +82,7 @@ class MemberCreateTest {
                 .account(account)
                 .nickname("   ")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -106,6 +109,7 @@ class MemberCreateTest {
                 .account(account)
                 .nickname(inputNickname)
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -133,6 +137,7 @@ class MemberCreateTest {
                 .account(account)
                 .nickname(inputNickname)
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -154,6 +159,7 @@ class MemberCreateTest {
         Member member = Member.builder()
                 .account(account)
                 .nickname("봄보")
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -180,13 +186,89 @@ class MemberCreateTest {
                 .account(account)
                 .nickname("봄보")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isEmpty();
+        Assertions.assertThat(constraintViolation).isEmpty();
+    }
+
+    @Test
+    @DisplayName("회원의 권한이 null 이면 검증 오류가 발생한다.")
+    void memberRoleIsNotNullTest() {
+
+        // given
+        Account account = Account.builder()
+                .email("goatodo@email.com")
+                .password("abcd1234")
+                .build();
+
+        Member member = Member.builder()
+                .account(account)
+                .nickname("봄보")
+                .occupation(Occupation.GENERAL)
+                .build();
+
+        // when
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
+
+        // then
+        Assertions.assertThat(constraintViolation).isNotEmpty();
+
+        Assertions.assertThat(constraintViolation)
+                .extracting(ConstraintViolation::getMessage)
+                .containsOnly("회원의 역할은 null 일 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("운영자 권한을 가진 계정이면 true 를 반환한다.")
+    void memberRoleIsAdminTest() {
+
+        // given
+        Account account = Account.builder()
+                .email("goatodo@email.com")
+                .password("abcd1234")
+                .build();
+
+        Member member = Member.builder()
+                .account(account)
+                .nickname("봄보")
+                .occupation(Occupation.GENERAL)
+                .role(Role.ADMIN)
+                .build();
+
+        // when
+        boolean isAdmin = member.isAdmin();
+
+        // then
+        Assertions.assertThat(isAdmin).isTrue();
+    }
+
+    @Test
+    @DisplayName("일반 권한을 가진 회원이면 false 를 반환한다.")
+    void memberRoleIsNotAdminTest() {
+
+        // given
+        Account account = Account.builder()
+                .email("goatodo@email.com")
+                .password("abcd1234")
+                .build();
+
+        Member member = Member.builder()
+                .account(account)
+                .nickname("봄보")
+                .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
+                .build();
+
+        // when
+        boolean isAdmin = member.isAdmin();
+
+        // then
+        Assertions.assertThat(isAdmin).isFalse();
     }
 
     @Test
@@ -203,12 +285,13 @@ class MemberCreateTest {
                 .account(account)
                 .nickname("봄보")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
-        Set<ConstraintViolation<Member>> validatedSet = validator.validate(member);
+        Set<ConstraintViolation<Member>> constraintViolation = validator.validate(member);
 
         // then
-        Assertions.assertThat(validatedSet).isEmpty();
+        Assertions.assertThat(constraintViolation).isEmpty();
     }
 }

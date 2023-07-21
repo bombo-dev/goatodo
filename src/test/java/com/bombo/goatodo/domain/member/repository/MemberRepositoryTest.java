@@ -3,6 +3,7 @@ package com.bombo.goatodo.domain.member.repository;
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.Occupation;
+import com.bombo.goatodo.domain.member.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,7 @@ class MemberRepositoryTest {
                 .account(account)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         // when
@@ -54,6 +56,7 @@ class MemberRepositoryTest {
                 .account(account)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         Member savedMember = memberRepository.save(member);
@@ -84,12 +87,14 @@ class MemberRepositoryTest {
                 .account(accountA)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         Member memberB = Member.builder()
                 .account(accountB)
                 .nickname("고투두2")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         memberRepository.save(memberA);
@@ -115,6 +120,7 @@ class MemberRepositoryTest {
                 .account(account)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         Member savedMember = memberRepository.save(member);
@@ -140,6 +146,7 @@ class MemberRepositoryTest {
                 .account(account)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         Member savedMember = memberRepository.save(member);
@@ -164,6 +171,7 @@ class MemberRepositoryTest {
                 .account(account)
                 .nickname("고투두")
                 .occupation(Occupation.GENERAL)
+                .role(Role.NORMAL)
                 .build();
 
         Member savedMember = memberRepository.save(member);

@@ -1,6 +1,7 @@
 package com.bombo.goatodo.domain.member.service;
 
 import com.bombo.goatodo.domain.member.Occupation;
+import com.bombo.goatodo.domain.member.Role;
 import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberUpdateRequest;
@@ -8,6 +9,7 @@ import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
 import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
+import com.bombo.goatodo.global.exception.RoleException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberCreateRequest memberCreateRequestB = new MemberCreateRequest(
@@ -40,7 +43,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234!",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
         memberService.save(memberCreateRequestA);
 
@@ -61,7 +65,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberCreateRequest memberCreateRequestB = new MemberCreateRequest(
@@ -69,7 +74,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234!",
                 "고투두2",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
         memberService.save(memberCreateRequestA);
 
@@ -90,7 +96,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         // when
@@ -110,7 +117,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         // when
@@ -131,7 +139,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         // when
@@ -153,7 +162,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         // when
@@ -185,7 +195,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberCreateRequest memberCreateRequestB = new MemberCreateRequest(
@@ -193,7 +204,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두2",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         memberService.save(memberCreateRequestA);
@@ -216,7 +228,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberCreateRequest memberCreateRequestB = new MemberCreateRequest(
@@ -224,7 +237,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두2",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
         memberService.save(memberCreateRequestA);
         MemberResponse savedMember = memberService.save(memberCreateRequestB);
@@ -252,7 +266,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
         MemberResponse savedMember = memberService.save(memberCreateRequest);
 
@@ -281,7 +296,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
         MemberResponse savedMember = memberService.save(memberCreateRequest);
 
@@ -292,8 +308,8 @@ class DefaultMemberServiceTest {
 
         // then
         Assertions.assertThatThrownBy(() -> memberService.updatePassword(memberAccountRequest))
-                .isInstanceOf(IllegalStateException.class)
-                .hasMessage("이메일이 일치하지 않아 패스워드를 변경 할 수 없습니다.");
+                .isInstanceOf(RoleException.class)
+                .hasMessage("수정 할 수 있는 권한이 없습니다.");
     }
 
     @Test
@@ -305,7 +321,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberResponse savedMember = memberService.save(memberCreateRequest);
@@ -329,7 +346,8 @@ class DefaultMemberServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL
+                Occupation.GENERAL,
+                Role.NORMAL
         );
 
         MemberResponse savedMember = memberService.save(memberCreateRequest);
