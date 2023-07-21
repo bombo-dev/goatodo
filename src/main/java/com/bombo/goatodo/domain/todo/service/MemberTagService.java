@@ -15,7 +15,6 @@ import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
 import com.bombo.goatodo.global.exception.RoleException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +23,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@Qualifier("memberTagService")
-public class MemberTagService implements TagService {
+public class MemberTagService {
 
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
 
     @Transactional
-    @Override
     public TagResponse save(TagCreateRequest tagCreateRequest) {
         validateRole(tagCreateRequest.tagType());
         validateDuplicatedTag(tagCreateRequest.memberId(), tagCreateRequest.name());
@@ -49,8 +46,7 @@ public class MemberTagService implements TagService {
         return new TagResponse(savedTag);
     }
 
-    @Override
-    public TagResponses findCategoriesForSelecting(Long memberId) {
+    public TagResponses findTagsForSelecting(Long memberId) {
         List<TagResponse> findSelectingCategories = tagRepository.findSelectingTag(memberId)
                 .stream()
                 .map(TagResponse::new)
@@ -59,8 +55,7 @@ public class MemberTagService implements TagService {
         return new TagResponses(findSelectingCategories);
     }
 
-    @Override
-    public TagResponses findCategoriesByMember(Long memberId) {
+    public TagResponses findTagsByMember(Long memberId) {
         List<TagResponse> findCategories = tagRepository.findByMember_Id(memberId)
                 .stream()
                 .map(TagResponse::new)
@@ -69,8 +64,7 @@ public class MemberTagService implements TagService {
         return new TagResponses(findCategories);
     }
 
-    @Override
-    public void updateCategory(TagUpdateRequest tagUpdateRequest) {
+    public TagResponse updateTag(TagUpdateRequest tagUpdateRequest) {
         validateRole(tagUpdateRequest.tagType());
 
         Tag findTag = tagRepository.findById(tagUpdateRequest.id())
@@ -84,10 +78,10 @@ public class MemberTagService implements TagService {
         }
 
         findTag.changeTag(tagUpdateRequest.name());
+        return new TagResponse(findTag);
     }
 
-    @Override
-    public void deleteCategory(TagDeleteRequest tagDeleteRequest) {
+    public void deleteTag(TagDeleteRequest tagDeleteRequest) {
         Tag findTag = tagRepository.findById(tagDeleteRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
