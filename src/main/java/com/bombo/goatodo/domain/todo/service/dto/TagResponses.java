@@ -7,7 +7,7 @@ public record TagResponses(
         List<TagResponse> tagResponseList
 ) {
 
-    public List<TagResponse> getCategoryResponseList() {
+    public List<TagResponse> getTagResponseList() {
         return Collections.unmodifiableList(tagResponseList);
     }
 }

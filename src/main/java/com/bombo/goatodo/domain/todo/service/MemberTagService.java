@@ -30,7 +30,7 @@ public class MemberTagService {
 
     @Transactional
     public TagResponse save(TagCreateRequest tagCreateRequest) {
-        validateRole(tagCreateRequest.tagType());
+        validateRole(tagCreateRequest.tagType(), ErrorCode.CREATE_REQUEST_IS_FORBIDDEN);
         validateDuplicatedTag(tagCreateRequest.memberId(), tagCreateRequest.name());
 
         Member findMember = memberRepository.findById(tagCreateRequest.memberId())
@@ -65,7 +65,7 @@ public class MemberTagService {
     }
 
     public TagResponse updateTag(TagUpdateRequest tagUpdateRequest) {
-        validateRole(tagUpdateRequest.tagType());
+        validateRole(tagUpdateRequest.tagType(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
         Tag findTag = tagRepository.findById(tagUpdateRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
@@ -73,10 +73,7 @@ public class MemberTagService {
         Member findMember = memberRepository.findById(tagUpdateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (!findTag.isOwnTag(findMember)) {
-            throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
-        }
-
+        validateOwner(findTag, findMember, ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         findTag.changeTag(tagUpdateRequest.name());
         return new TagResponse(findTag);
     }
@@ -87,15 +84,19 @@ public class MemberTagService {
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (!findTag.isOwnTag(findMember)) {
-            throw new RoleException(ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
-        }
+        validateOwner(findTag, findMember, ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
         tagRepository.delete(findTag);
     }
 
-    private void validateRole(TagType tagType) {
+    private void validateRole(TagType tagType, ErrorCode errorCode) {
         if (tagType.isCommonType()) {
-            throw new RoleException(ErrorCode.CREATE_REQUEST_IS_FORBIDDEN);
+            throw new RoleException(errorCode);
+        }
+    }
+
+    private void validateOwner(Tag findTag, Member findMember, ErrorCode errorCode) {
+        if (!findTag.isOwnTag(findMember)) {
+            throw new RoleException(errorCode);
         }
     }
 

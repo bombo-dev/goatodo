@@ -57,6 +57,14 @@ public class Tag {
         return this.tagType == TagType.COMMON;
     }
 
+    public Long getMemberId() {
+        if (this.member != null) {
+            return this.member.getId();
+        }
+
+        return null;
+    }
+
     public void changeTag(String tag) {
         this.name = tag;
     }

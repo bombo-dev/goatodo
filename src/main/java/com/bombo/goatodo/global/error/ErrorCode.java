@@ -18,6 +18,7 @@ public enum ErrorCode {
 
     // FORBIDDEN
     CREATE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "생성 할 수 있는 권한이 없습니다."),
+    READ_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "조회 할 수 있는 권한이 없습니다."),
     EDIT_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "수정 할 수 있는 권한이 없습니다."),
     DELETE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "삭제 할 수 있는 권한이 없습니다.");
 
