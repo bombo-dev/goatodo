@@ -41,6 +41,10 @@ public class Tag {
         this.tagType = tagType;
     }
 
+    public boolean isOwnTag(Member member) {
+        return this.member.isSameMember(member.getAccount());
+    }
+
     public void changeTag(String tag) {
         this.name = tag;
     }
