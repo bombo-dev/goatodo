@@ -45,7 +45,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("공통 카테고리를 만들어 낼 수 있다.")
+    @DisplayName("공통 태그를 만들어 낼 수 있다.")
     void createCategoryNonMemberTest() {
         // given
         Tag tag = Tag.builder()
@@ -63,7 +63,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원만의 카테고리를 생성 할 수 있다.")
+    @DisplayName("회원만의 태그를 생성 할 수 있다.")
     void createCategoryWithMemberTest() {
         // given
         Member savedMember = memberRepository.save(member);
@@ -83,7 +83,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("전체 카테고리 정보를 조회할 수 있다.")
+    @DisplayName("전체 태그 정보를 조회할 수 있다.")
     void findAllCategoryTest() {
         // given
         Tag tagA = Tag.builder()
@@ -107,7 +107,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("공통 카테고리를 조회 할 수 있다.")
+    @DisplayName("공통 태그를 조회 할 수 있다.")
     void findCategoryWithMemberTest() {
         // given
         Tag tagA = Tag.builder()
@@ -139,7 +139,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("동일한 공통 카테고리를 조회 할 수 있다.")
+    @DisplayName("동일한 공통 태그를 조회 할 수 있다.")
     void findCommonCategoryWithTagTest() {
         // given
         Tag tagA = Tag.builder()
@@ -171,7 +171,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원이 선택할 카테고리를 조회 할 수 있다.")
+    @DisplayName("회원이 선택할 태그를 조회 할 수 있다.")
     void findCategoryForSelectTest() {
         // given
         Tag tagA = Tag.builder()
@@ -203,7 +203,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원이 생성한 카테고리를 조회 할 수 있다.")
+    @DisplayName("회원이 생성한 태그를 조회 할 수 있다.")
     void findCategoriesByMember() {
         // given
         Member savedMember = memberRepository.save(member);
@@ -240,11 +240,90 @@ class TagRepositoryTest {
 
         // then
         Assertions.assertThat(findCategories).hasSize(2);
-
     }
 
     @Test
-    @DisplayName("회원이 생성한 카테고리를 아이디와 이름으로 조회 할 수 있다.")
+    @DisplayName("회원의 태그 생성 시 중복 된 공통 태그를 확인 할 수 있다.")
+    void findDuplicatedCommonTagTest() {
+        // given
+        Member savedMember = memberRepository.save(member);
+
+        Tag tagA = Tag.builder()
+                .name("수업")
+                .tagType(TagType.COMMON)
+                .build();
+
+        Tag tagB = Tag.builder()
+                .name("스터디")
+                .tagType(TagType.COMMON)
+                .build();
+
+        Tag tagC = Tag.builder()
+                .name("일상")
+                .member(savedMember)
+                .tagType(TagType.INDIVIDUAL)
+                .build();
+
+        Tag tagD = Tag.builder()
+                .name("청소")
+                .member(savedMember)
+                .tagType(TagType.INDIVIDUAL)
+                .build();
+
+        tagRepository.save(tagA);
+        tagRepository.save(tagB);
+        tagRepository.save(tagC);
+        tagRepository.save(tagD);
+
+        // when
+        Optional<Tag> findTag = tagRepository.existSameMemberCategory(savedMember.getId(), "수업");
+
+        // then
+        Assertions.assertThat(findTag).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("회원의 태그 생성 시 중복 된 회원 태그를 확인 할 수 있다.")
+    void findDuplicatedMemberTagTest() {
+        // given
+        Member savedMember = memberRepository.save(member);
+
+        Tag tagA = Tag.builder()
+                .name("수업")
+                .tagType(TagType.COMMON)
+                .build();
+
+        Tag tagB = Tag.builder()
+                .name("스터디")
+                .tagType(TagType.COMMON)
+                .build();
+
+        Tag tagC = Tag.builder()
+                .name("일상")
+                .member(savedMember)
+                .tagType(TagType.INDIVIDUAL)
+                .build();
+
+        Tag tagD = Tag.builder()
+                .name("청소")
+                .member(savedMember)
+                .tagType(TagType.INDIVIDUAL)
+                .build();
+
+        tagRepository.save(tagA);
+        tagRepository.save(tagB);
+        tagRepository.save(tagC);
+        tagRepository.save(tagD);
+
+        // when
+        Optional<Tag> findTag = tagRepository.existSameMemberCategory(savedMember.getId(), "일상");
+
+        // then
+        Assertions.assertThat(findTag).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("회원이 생성한 태그를 아이디와 이름으로 조회 할 수 있다.")
     void findCategoryByTagAndMemberIdTest() {
         // given
         Member savedMember = memberRepository.save(member);
@@ -263,7 +342,7 @@ class TagRepositoryTest {
     }
 
     @Test
-    @DisplayName("회원이 생성한 카테고리를 삭제 할 수 있다.")
+    @DisplayName("회원이 생성한 태그를 삭제 할 수 있다.")
     void deleteCategoryTag() {
         // given
         Member savedMember = memberRepository.save(member);
