@@ -11,6 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "tag",
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name = "uniqueMemberNameType",
+                        columnNames = {"name", "tag_type"}
+                )
+        })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Tag {
@@ -31,10 +38,11 @@ public class Tag {
 
     @NotNull(message = "태그 타입은 null 일 수 없습니다.")
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "tag_type", nullable = false)
     private TagType tagType;
 
     @Builder
-    public Tag(Long id, Member member, String name, TagType tagType) {
+    public Tag(Long id, Member member, String name, @NotNull TagType tagType) {
         this.id = id;
         this.member = member;
         this.name = name;
@@ -43,6 +51,10 @@ public class Tag {
 
     public boolean isOwnTag(Member member) {
         return this.member.isSameMember(member.getAccount());
+    }
+
+    public boolean isCommonCategory() {
+        return this.tagType == TagType.COMMON;
     }
 
     public void changeTag(String tag) {

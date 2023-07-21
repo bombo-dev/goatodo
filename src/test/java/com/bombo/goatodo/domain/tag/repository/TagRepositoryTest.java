@@ -13,11 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
 
+@ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 class TagRepositoryTest {
 
@@ -46,7 +50,7 @@ class TagRepositoryTest {
 
     @Test
     @DisplayName("공통 태그를 만들어 낼 수 있다.")
-    void createCategoryNonMemberTest() {
+    void createTagNonMemberTest() {
         // given
         Tag tag = Tag.builder()
                 .name("수업")
@@ -54,17 +58,17 @@ class TagRepositoryTest {
 
         // when
         Tag savedTag = tagRepository.save(tag);
-        Optional<Tag> findCategory = tagRepository.findById(savedTag.getId());
+        Optional<Tag> findTag = tagRepository.findById(savedTag.getId());
 
         // then
-        Assertions.assertThat(findCategory).isNotEmpty();
-        Assertions.assertThat(findCategory.get().getMember()).isNull();
-        Assertions.assertThat(findCategory.get()).isEqualTo(savedTag);
+        Assertions.assertThat(findTag).isNotEmpty();
+        Assertions.assertThat(findTag.get().getMember()).isNull();
+        Assertions.assertThat(findTag.get()).isEqualTo(savedTag);
     }
 
     @Test
     @DisplayName("회원만의 태그를 생성 할 수 있다.")
-    void createCategoryWithMemberTest() {
+    void createTagWithMemberTest() {
         // given
         Member savedMember = memberRepository.save(member);
         Tag tag = Tag.builder()
@@ -74,17 +78,17 @@ class TagRepositoryTest {
 
         // when
         Tag savedTag = tagRepository.save(tag);
-        Optional<Tag> findCategory = tagRepository.findById(savedTag.getId());
+        Optional<Tag> findTag = tagRepository.findById(savedTag.getId());
 
         // then
-        Assertions.assertThat(findCategory).isNotEmpty();
-        Assertions.assertThat(findCategory.get().getMember()).isNotNull();
-        Assertions.assertThat(findCategory.get()).isEqualTo(savedTag);
+        Assertions.assertThat(findTag).isNotEmpty();
+        Assertions.assertThat(findTag.get().getMember()).isNotNull();
+        Assertions.assertThat(findTag.get()).isEqualTo(savedTag);
     }
 
     @Test
     @DisplayName("전체 태그 정보를 조회할 수 있다.")
-    void findAllCategoryTest() {
+    void findAllTagTest() {
         // given
         Tag tagA = Tag.builder()
                 .name("수업")
@@ -108,7 +112,7 @@ class TagRepositoryTest {
 
     @Test
     @DisplayName("공통 태그를 조회 할 수 있다.")
-    void findCategoryWithMemberTest() {
+    void findTagWithMemberTest() {
         // given
         Tag tagA = Tag.builder()
                 .name("수업")
@@ -140,7 +144,7 @@ class TagRepositoryTest {
 
     @Test
     @DisplayName("동일한 공통 태그를 조회 할 수 있다.")
-    void findCommonCategoryWithTagTest() {
+    void findCommonTagWithTagTest() {
         // given
         Tag tagA = Tag.builder()
                 .name("수업")
@@ -164,15 +168,15 @@ class TagRepositoryTest {
         tagRepository.save(tagB);
         tagRepository.save(tagC);
 
-        Optional<Tag> findCategory = tagRepository.existSameCommonCategory("수업");
+        Optional<Tag> findTag = tagRepository.existSameCommonTag("수업");
 
         // then
-        Assertions.assertThat(findCategory).isNotEmpty();
+        Assertions.assertThat(findTag).isNotEmpty();
     }
 
     @Test
     @DisplayName("회원이 선택할 태그를 조회 할 수 있다.")
-    void findCategoryForSelectTest() {
+    void findTagForSelectTest() {
         // given
         Tag tagA = Tag.builder()
                 .name("수업")
@@ -195,7 +199,7 @@ class TagRepositoryTest {
         tagRepository.save(tagA);
         tagRepository.save(tagB);
         tagRepository.save(tagC);
-        List<Tag> findCommonCategories = tagRepository.findSelectingCategory(savedMember.getId());
+        List<Tag> findCommonCategories = tagRepository.findSelectingTag(savedMember.getId());
 
         // then
         Assertions.assertThat(findCommonCategories).isNotEmpty();
@@ -276,7 +280,7 @@ class TagRepositoryTest {
         tagRepository.save(tagD);
 
         // when
-        Optional<Tag> findTag = tagRepository.existSameMemberCategory(savedMember.getId(), "수업");
+        Optional<Tag> findTag = tagRepository.existSameMemberTag(savedMember.getId(), "수업");
 
         // then
         Assertions.assertThat(findTag).isNotEmpty();
@@ -316,7 +320,7 @@ class TagRepositoryTest {
         tagRepository.save(tagD);
 
         // when
-        Optional<Tag> findTag = tagRepository.existSameMemberCategory(savedMember.getId(), "일상");
+        Optional<Tag> findTag = tagRepository.existSameMemberTag(savedMember.getId(), "일상");
 
         // then
         Assertions.assertThat(findTag).isNotEmpty();
@@ -324,7 +328,7 @@ class TagRepositoryTest {
 
     @Test
     @DisplayName("회원이 생성한 태그를 아이디와 이름으로 조회 할 수 있다.")
-    void findCategoryByTagAndMemberIdTest() {
+    void findTagByTagAndMemberIdTest() {
         // given
         Member savedMember = memberRepository.save(member);
         Tag tag = Tag.builder()
@@ -335,15 +339,15 @@ class TagRepositoryTest {
 
         // when
         tagRepository.save(tag);
-        Optional<Tag> findCategory = tagRepository.existSameMemberCategory(savedMember.getId(), tag.getName());
+        Optional<Tag> findtag = tagRepository.existSameMemberTag(savedMember.getId(), tag.getName());
 
         // then
-        Assertions.assertThat(findCategory).isNotEmpty();
+        Assertions.assertThat(findtag).isNotEmpty();
     }
 
     @Test
     @DisplayName("회원이 생성한 태그를 삭제 할 수 있다.")
-    void deleteCategoryTag() {
+    void deleteTagTag() {
         // given
         Member savedMember = memberRepository.save(member);
         Tag tag = Tag.builder()
@@ -356,9 +360,9 @@ class TagRepositoryTest {
         Tag savedTag = tagRepository.save(tag);
 
         tagRepository.delete(savedTag);
-        Optional<Tag> findCategory = tagRepository.findById(savedTag.getId());
+        Optional<Tag> findTag = tagRepository.findById(savedTag.getId());
 
         // then
-        Assertions.assertThat(findCategory).isEmpty();
+        Assertions.assertThat(findTag).isEmpty();
     }
 }

@@ -16,11 +16,11 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findByMember_Id(Long memberId);
 
     @Query("SELECT t FROM Tag t WHERE t.member IS NULL OR t.member.id = :memberId")
-    List<Tag> findSelectingCategory(Long memberId);
+    List<Tag> findSelectingTag(Long memberId);
 
     @Query("SELECT t FROM Tag t LEFT JOIN FETCH t.member m WHERE (m.id IS NULL OR m.id = :memberId) AND t.name = :name")
-    Optional<Tag> existSameMemberCategory(Long memberId, String name);
+    Optional<Tag> existSameMemberTag(Long memberId, String name);
 
     @Query("SELECT t FROM Tag t WHERE t.member IS NULL AND t.name = :name")
-    Optional<Tag> existSameCommonCategory(String name);
+    Optional<Tag> existSameCommonTag(String name);
 }

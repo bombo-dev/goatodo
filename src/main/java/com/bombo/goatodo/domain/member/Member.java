@@ -76,4 +76,8 @@ public class Member extends BaseEntity {
     public boolean isAdmin() {
         return this.role == Role.ADMIN;
     }
+
+    public boolean isNormal() {
+        return this.role == Role.NORMAL;
+    }
 }

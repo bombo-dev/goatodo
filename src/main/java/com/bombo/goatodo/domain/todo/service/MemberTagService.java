@@ -13,56 +13,45 @@ import com.bombo.goatodo.domain.todo.service.dto.TagResponses;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
+import com.bombo.goatodo.global.exception.RoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Qualifier("memberCategoryService")
+@Transactional(readOnly = true)
+@Qualifier("memberTagService")
 public class MemberTagService implements TagService {
 
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
 
+    @Transactional
     @Override
     public TagResponse save(TagCreateRequest tagCreateRequest) {
-        validateDuplicatedCategory(tagCreateRequest);
+        validateRole(tagCreateRequest.tagType());
+        validateDuplicatedTag(tagCreateRequest.memberId(), tagCreateRequest.name());
 
-        if (isCommonCategory(tagCreateRequest.tagType())) {
-            Tag savedTag = saveCommonCategory(tagCreateRequest);
-            return new TagResponse(savedTag);
-        }
-
-        Tag savedTag = savedMemberCategory(tagCreateRequest);
-        return new TagResponse(savedTag);
-    }
-
-    private Tag saveCommonCategory(TagCreateRequest tagCreateRequest) {
-        Tag tag = Tag.builder()
-                .name(tagCreateRequest.name())
-                .build();
-
-        return tagRepository.save(tag);
-    }
-
-    private Tag savedMemberCategory(TagCreateRequest tagCreateRequest) {
         Member findMember = memberRepository.findById(tagCreateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         Tag tag = Tag.builder()
                 .member(findMember)
                 .name(tagCreateRequest.name())
+                .tagType(tagCreateRequest.tagType())
                 .build();
 
-        return tagRepository.save(tag);
+        Tag savedTag = tagRepository.save(tag);
+        return new TagResponse(savedTag);
     }
 
     @Override
     public TagResponses findCategoriesForSelecting(Long memberId) {
-        List<TagResponse> findSelectingCategories = tagRepository.findSelectingCategory(memberId)
+        List<TagResponse> findSelectingCategories = tagRepository.findSelectingTag(memberId)
                 .stream()
                 .map(TagResponse::new)
                 .toList();
@@ -82,14 +71,7 @@ public class MemberTagService implements TagService {
 
     @Override
     public void updateCategory(TagUpdateRequest tagUpdateRequest) {
-
-        if (isCommonCategory(tagUpdateRequest.tagType())) {
-            Tag findTag = tagRepository.findById(tagUpdateRequest.id())
-                    .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
-
-            findTag.changeTag(tagUpdateRequest.name());
-            return;
-        }
+        validateRole(tagUpdateRequest.tagType());
 
         Tag findTag = tagRepository.findById(tagUpdateRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
@@ -97,64 +79,36 @@ public class MemberTagService implements TagService {
         Member findMember = memberRepository.findById(tagUpdateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (findTag.isOwnTag(findMember)) {
-            findTag.changeTag(tagUpdateRequest.name());
-            return;
-        } else {
-            throw new IllegalStateException("적절한 권한이 없어 태그 변경을 수행 할 수 없습니다.");
+        if (!findTag.isOwnTag(findMember)) {
+            throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         }
+
+        findTag.changeTag(tagUpdateRequest.name());
     }
 
     @Override
     public void deleteCategory(TagDeleteRequest tagDeleteRequest) {
-        if (isCommonCategory(tagDeleteRequest.tagType())) {
-            Tag findTag = tagRepository.findById(tagDeleteRequest.id())
-                    .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
-
-            tagRepository.delete(findTag);
-            return;
-        }
-
         Tag findTag = tagRepository.findById(tagDeleteRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (findTag.isOwnTag(findMember)) {
-            tagRepository.delete(findTag);
+        if (!findTag.isOwnTag(findMember)) {
+            throw new RoleException(ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
         }
-
+        tagRepository.delete(findTag);
     }
 
-    private void validateDuplicatedCategory(TagCreateRequest tagCreateRequest) {
-        validateDuplicatedCommonCategory(tagCreateRequest);
-        validateDuplicatedMemberCategory(tagCreateRequest);
-    }
-
-    private boolean isCommonCategory(TagType tagType) {
-        return tagType == TagType.COMMON;
-    }
-
-    private void validateDuplicatedCommonCategory(TagCreateRequest tagCreateRequest) {
-        if (isCommonCategory(tagCreateRequest.tagType())) {
-            tagRepository.existSameCommonCategory(tagCreateRequest.name())
-                    .ifPresent((category -> {
-                        throw new DuplicateException(ErrorCode.CATEGORY_DUPLICATE_TAG);
-                    }));
+    private void validateRole(TagType tagType) {
+        if (tagType.isCommonType()) {
+            throw new RoleException(ErrorCode.CREATE_REQUEST_IS_FORBIDDEN);
         }
     }
 
-    private void validateDuplicatedMemberCategory(TagCreateRequest tagCreateRequest) {
-        if (!isCommonCategory(tagCreateRequest.tagType())) {
-            tagRepository.existSameCommonCategory(tagCreateRequest.name())
-                    .ifPresent((category -> {
-                        throw new DuplicateException(ErrorCode.CATEGORY_DUPLICATE_TAG);
-                    }));
-
-            tagRepository.existSameMemberCategory(tagCreateRequest.memberId(), tagCreateRequest.name())
-                    .ifPresent((category -> {
-                        throw new DuplicateException(ErrorCode.CATEGORY_DUPLICATE_TAG);
-                    }));
-        }
+    private void validateDuplicatedTag(Long memberId, String name) {
+        tagRepository.existSameMemberTag(memberId, name)
+                .ifPresent((tag) -> {
+                    throw new DuplicateException(ErrorCode.TAG_DUPLICATE);
+                });
     }
 }
