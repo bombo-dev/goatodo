@@ -20,10 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @Transactional
-class DefaultMemberServiceTest {
+class MemberServiceTest {
 
     @Autowired
-    DefaultMemberService memberService;
+    private MemberService memberService;
 
     @Test
     @DisplayName("회원의 닉네임이 중복되면 예외가 발생한다.")
