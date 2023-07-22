@@ -2,7 +2,6 @@ package com.bombo.goatodo.global;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import lombok.Getter;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,14 +15,12 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity extends CreatedBaseEntity {
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 
-    @PrePersist
     @Override
     public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        createdAt = now;
-        updatedAt = now;
+        super.prePersist();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
