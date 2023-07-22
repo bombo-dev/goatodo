@@ -135,7 +135,7 @@ class MemberTagServiceTest {
     }
 
     @Test
-    @DisplayName("일반 회원은 공용 태그를 생성 할 수 있다.")
+    @DisplayName("일반 회원은 개인 태그를 생성 할 수 있다.")
     void saveIndividualTag() {
         // given
         MemberResponse savedNormalMember = defaultMemberService.save(normalMemberCreateRequest);
