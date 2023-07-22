@@ -9,6 +9,7 @@ public enum ErrorCode {
     // BAD_REQUEST
     NOT_EXIST_ID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 ID가 전달되었습니다."),
 
+    MEMBER_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 틀렸습니다."),
     MEMBER_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "이메일이 중복되었습니다."),
     MEMBER_DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, "닉네임이 중복되었습니다."),
     MEMBER_DUPLICATE_PASSWORD(HttpStatus.BAD_REQUEST, "동일한 패스워드로 변경은 불가능합니다."),

@@ -1,5 +1,6 @@
 package com.bombo.goatodo.domain.member.service;
 
+import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
@@ -9,6 +10,7 @@ import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
 import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
+import com.bombo.goatodo.global.exception.InvalidEmailOrPasswordException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
 import com.bombo.goatodo.global.exception.RoleException;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,18 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(requestMember);
         return savedMember.getId();
+    }
+
+    public Long login(MemberAccountRequest memberAccountRequest) {
+        Member findMember = memberRepository.findByAccount_Email(memberAccountRequest.email())
+                .orElseThrow(() -> new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED));
+
+        Account inputAccount = memberAccountRequest.toAccount();
+        if (!findMember.isSameMember(inputAccount)) {
+            throw new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED);
+        }
+
+        return findMember.getId();
     }
 
     public MembersResponse findAll() {
