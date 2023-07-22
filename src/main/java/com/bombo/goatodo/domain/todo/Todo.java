@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -63,5 +65,9 @@ public class Todo extends BaseEntity {
         this.description = description;
         this.completeStatus = completeStatus;
         this.isActive = isActive;
+    }
+
+    public void changeCreatedAtForTest(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
