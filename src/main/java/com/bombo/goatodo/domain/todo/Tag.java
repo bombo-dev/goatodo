@@ -42,8 +42,7 @@ public class Tag {
     private TagType tagType;
 
     @Builder
-    public Tag(Long id, Member member, String name, @NotNull TagType tagType) {
-        this.id = id;
+    public Tag(Member member, String name, @NotNull TagType tagType) {
         this.member = member;
         this.name = name;
         this.tagType = tagType;

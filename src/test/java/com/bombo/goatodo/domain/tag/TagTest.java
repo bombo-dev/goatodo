@@ -49,7 +49,6 @@ class TagTest {
     void categoryMemberIsNullTest() {
         // given
         Tag tag = Tag.builder()
-                .id(0L)
                 .name("카테고리 태그")
                 .tagType(TagType.COMMON)
                 .build();
@@ -66,7 +65,6 @@ class TagTest {
     void categoryTagOutOfRangeTest() {
         // given
         Tag tag = Tag.builder()
-                .id(0L)
                 .name("20자가 초과하는 태그를 한 번 만들어보았습니다.")
                 .member(member)
                 .tagType(TagType.INDIVIDUAL)
@@ -84,7 +82,6 @@ class TagTest {
     void categoryTagIsNotBlank() {
         // given
         Tag tag = Tag.builder()
-                .id(0L)
                 .name("   ")
                 .member(member)
                 .tagType(TagType.INDIVIDUAL)
@@ -102,7 +99,6 @@ class TagTest {
     void tagTypeisNotNullTest() {
         // given
         Tag tag = Tag.builder()
-                .id(0L)
                 .name("태그")
                 .member(member)
                 .build();
@@ -120,7 +116,6 @@ class TagTest {
     void categoryTagTest(String tag) {
         // given
         Tag category = Tag.builder()
-                .id(0L)
                 .name(tag)
                 .member(member)
                 .tagType(TagType.INDIVIDUAL)
