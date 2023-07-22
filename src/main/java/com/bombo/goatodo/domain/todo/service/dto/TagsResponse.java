@@ -3,7 +3,7 @@ package com.bombo.goatodo.domain.todo.service.dto;
 import java.util.Collections;
 import java.util.List;
 
-public record TagResponses(
+public record TagsResponse(
         List<TagResponse> tagResponseList
 ) {
 

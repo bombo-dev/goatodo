@@ -9,7 +9,7 @@ import com.bombo.goatodo.domain.todo.controller.dto.TagDeleteRequest;
 import com.bombo.goatodo.domain.todo.controller.dto.TagUpdateRequest;
 import com.bombo.goatodo.domain.todo.repository.TagRepository;
 import com.bombo.goatodo.domain.todo.service.dto.TagResponse;
-import com.bombo.goatodo.domain.todo.service.dto.TagResponses;
+import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
@@ -46,22 +46,22 @@ public class MemberTagService {
         return savedTag.getId();
     }
 
-    public TagResponses findTagsForSelecting(Long memberId) {
+    public TagsResponse findTagsForSelecting(Long memberId) {
         List<TagResponse> findSelectingCategories = tagRepository.findSelectingTag(memberId)
                 .stream()
                 .map(TagResponse::new)
                 .toList();
 
-        return new TagResponses(findSelectingCategories);
+        return new TagsResponse(findSelectingCategories);
     }
 
-    public TagResponses findTagsByMember(Long memberId) {
+    public TagsResponse findTagsByMember(Long memberId) {
         List<TagResponse> findCategories = tagRepository.findByMember_Id(memberId)
                 .stream()
                 .map(TagResponse::new)
                 .toList();
 
-        return new TagResponses(findCategories);
+        return new TagsResponse(findCategories);
     }
 
     public void updateTag(TagUpdateRequest tagUpdateRequest) {

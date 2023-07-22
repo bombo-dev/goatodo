@@ -9,7 +9,7 @@ import com.bombo.goatodo.domain.todo.controller.dto.*;
 import com.bombo.goatodo.domain.todo.repository.TagRepository;
 import com.bombo.goatodo.domain.todo.repository.TodoRepository;
 import com.bombo.goatodo.domain.todo.service.dto.TodoResponse;
-import com.bombo.goatodo.domain.todo.service.dto.TodoResponses;
+import com.bombo.goatodo.domain.todo.service.dto.TodosResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
 import com.bombo.goatodo.global.exception.RoleException;
@@ -63,13 +63,13 @@ public class TodoService {
         return new TodoResponse(findTodo);
     }
 
-    private TodoResponses findAll(TodoReadRequest todoReadRequest) {
+    private TodosResponse findAll(TodoReadRequest todoReadRequest) {
         List<TodoResponse> findTodoList = todoRepository.findAllByMember_Id(todoReadRequest.memberId())
                 .stream()
                 .map(TodoResponse::new)
                 .toList();
 
-        return new TodoResponses(findTodoList);
+        return new TodosResponse(findTodoList);
     }
 
     @Transactional

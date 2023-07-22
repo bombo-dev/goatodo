@@ -13,7 +13,7 @@ import com.bombo.goatodo.domain.todo.repository.TagRepository;
 import com.bombo.goatodo.domain.todo.service.AdminTagService;
 import com.bombo.goatodo.domain.todo.service.MemberTagService;
 import com.bombo.goatodo.domain.todo.service.dto.TagResponse;
-import com.bombo.goatodo.domain.todo.service.dto.TagResponses;
+import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
 import com.bombo.goatodo.global.exception.RoleException;
@@ -164,7 +164,7 @@ class MemberTagServiceTest {
         memberTagService.save(individualTagCreateRequest);
 
         // when
-        TagResponses findSelectingTags = memberTagService.findTagsForSelecting(savedNormalId);
+        TagsResponse findSelectingTags = memberTagService.findTagsForSelecting(savedNormalId);
         List<TagResponse> tagResponses = findSelectingTags.getTagResponseList();
 
         // then
@@ -185,7 +185,7 @@ class MemberTagServiceTest {
         Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
 
         // when
-        TagResponses findCreateTags = memberTagService.findTagsByMember(savedNormalId);
+        TagsResponse findCreateTags = memberTagService.findTagsByMember(savedNormalId);
         List<TagResponse> tagResponses = findCreateTags.getTagResponseList();
 
         TagResponse tagResponse = tagRepository.findById(savedIndividualTagId)

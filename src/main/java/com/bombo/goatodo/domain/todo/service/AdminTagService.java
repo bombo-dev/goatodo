@@ -31,6 +31,7 @@ public class AdminTagService {
         validateRole(findMember);
 
         Tag tag = Tag.builder()
+                .member(findMember)
                 .name(tagCreateRequest.name())
                 .tagType(TagType.COMMON)
                 .build();
