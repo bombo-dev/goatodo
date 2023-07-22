@@ -8,7 +8,6 @@ import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
 import com.bombo.goatodo.domain.todo.controller.dto.TagDeleteRequest;
 import com.bombo.goatodo.domain.todo.controller.dto.TagUpdateRequest;
 import com.bombo.goatodo.domain.todo.repository.TagRepository;
-import com.bombo.goatodo.domain.todo.service.dto.TagResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
@@ -25,7 +24,7 @@ public class AdminTagService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
 
-    public TagResponse save(TagCreateRequest tagCreateRequest) {
+    public Long save(TagCreateRequest tagCreateRequest) {
         validateDuplicatedCategory(tagCreateRequest.name());
         Member findMember = memberRepository.findById(tagCreateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
@@ -38,7 +37,7 @@ public class AdminTagService {
 
         Tag savedTag = tagRepository.save(tag);
 
-        return new TagResponse(savedTag);
+        return savedTag.getId();
     }
 
     public void updateCategory(TagUpdateRequest tagUpdateRequest) {

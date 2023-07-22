@@ -29,7 +29,7 @@ public class MemberTagService {
     private final TagRepository tagRepository;
 
     @Transactional
-    public TagResponse save(TagCreateRequest tagCreateRequest) {
+    public Long save(TagCreateRequest tagCreateRequest) {
         validateRole(tagCreateRequest.tagType(), ErrorCode.CREATE_REQUEST_IS_FORBIDDEN);
         validateDuplicatedTag(tagCreateRequest.memberId(), tagCreateRequest.name());
 
@@ -43,7 +43,7 @@ public class MemberTagService {
                 .build();
 
         Tag savedTag = tagRepository.save(tag);
-        return new TagResponse(savedTag);
+        return savedTag.getId();
     }
 
     public TagResponses findTagsForSelecting(Long memberId) {

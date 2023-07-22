@@ -101,11 +101,11 @@ class MemberServiceTest {
         );
 
         // when
-        MemberResponse savedMemberResponse = memberService.save(memberCreateRequest);
-        MemberResponse findMember = memberService.findOne(savedMemberResponse.id());
+        Long savedId = memberService.save(memberCreateRequest);
+        MemberResponse findMember = memberService.findOne(savedId);
 
         // then
-        Assertions.assertThat(savedMemberResponse).isEqualTo(findMember);
+        Assertions.assertThat(savedId).isEqualTo(findMember.id());
     }
 
     @Test
@@ -167,11 +167,11 @@ class MemberServiceTest {
         );
 
         // when
-        MemberResponse savedMemberResponse = memberService.save(memberCreateRequest);
-        MemberResponse findMember = memberService.findOne(savedMemberResponse.id());
+        Long savedId = memberService.save(memberCreateRequest);
+        MemberResponse findMember = memberService.findOne(savedId);
 
         // then
-        Assertions.assertThat(savedMemberResponse.id()).isEqualTo(findMember.id());
+        Assertions.assertThat(savedId).isEqualTo(findMember.id());
     }
 
     @Test
@@ -241,10 +241,10 @@ class MemberServiceTest {
                 Role.NORMAL
         );
         memberService.save(memberCreateRequestA);
-        MemberResponse savedMember = memberService.save(memberCreateRequestB);
+        Long savedId = memberService.save(memberCreateRequestB);
 
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
-                savedMember.id(),
+                savedId,
                 "고투두",
                 Occupation.ELEMENTARY_SCHOOL_STUDENT
         );
@@ -269,20 +269,20 @@ class MemberServiceTest {
                 Occupation.GENERAL,
                 Role.NORMAL
         );
-        MemberResponse savedMember = memberService.save(memberCreateRequest);
+        Long savedId = memberService.save(memberCreateRequest);
 
         // when
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
-                savedMember.id(),
+                savedId,
                 "희귀닉네임",
                 Occupation.ELEMENTARY_SCHOOL_STUDENT
         );
 
         memberService.updateProfile(memberUpdateRequest);
-        MemberResponse findMember = memberService.findOne(savedMember.id());
+        MemberResponse findMember = memberService.findOne(savedId);
 
         // then
-        Assertions.assertThat(findMember.id()).isEqualTo(savedMember.id());
+        Assertions.assertThat(findMember.id()).isEqualTo(savedId);
         Assertions.assertThat(findMember.nickname()).isEqualTo("희귀닉네임");
         Assertions.assertThat(findMember.occupation()).isEqualTo(Occupation.ELEMENTARY_SCHOOL_STUDENT);
     }
@@ -299,10 +299,10 @@ class MemberServiceTest {
                 Occupation.GENERAL,
                 Role.NORMAL
         );
-        MemberResponse savedMember = memberService.save(memberCreateRequest);
+        Long savedId = memberService.save(memberCreateRequest);
 
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(savedMember.id(), "new@email.com", "password123");
+                new MemberAccountRequest(savedId, "new@email.com", "password123");
 
         // when
 
@@ -324,12 +324,13 @@ class MemberServiceTest {
                 Occupation.GENERAL,
                 Role.NORMAL
         );
-
-        MemberResponse savedMember = memberService.save(memberCreateRequest);
+        Long savedId = memberService.save(memberCreateRequest);
+        MemberResponse findMember = memberService.findOne(savedId);
 
         // when
+
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(savedMember.id(), savedMember.email(), "password1234");
+                new MemberAccountRequest(findMember.id(), findMember.email(), "password1234");
 
         // then
         Assertions.assertThatThrownBy(() -> memberService.updatePassword(memberAccountRequest))
@@ -349,17 +350,17 @@ class MemberServiceTest {
                 Occupation.GENERAL,
                 Role.NORMAL
         );
-
-        MemberResponse savedMember = memberService.save(memberCreateRequest);
+        Long savedId = memberService.save(memberCreateRequest);
+        MemberResponse findMember = memberService.findOne(savedId);
 
         // when
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(savedMember.id(), savedMember.email(), "password123");
+                new MemberAccountRequest(findMember.id(), findMember.email(), "password123");
         memberService.updatePassword(memberAccountRequest);
 
-        MemberResponse findMember = memberService.findOne(savedMember.id());
+        MemberResponse updatedMember = memberService.findOne(savedId);
 
         // then
-        Assertions.assertThat(findMember.password()).isEqualTo("password123");
+        Assertions.assertThat(updatedMember.password()).isEqualTo("password123");
     }
 }

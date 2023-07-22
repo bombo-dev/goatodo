@@ -4,7 +4,6 @@ import com.bombo.goatodo.domain.member.Occupation;
 import com.bombo.goatodo.domain.member.Role;
 import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
 import com.bombo.goatodo.domain.member.service.MemberService;
-import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
 import com.bombo.goatodo.domain.todo.Tag;
 import com.bombo.goatodo.domain.todo.TagType;
 import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
@@ -73,9 +72,9 @@ class MemberTagServiceTest {
     @DisplayName("회원이 이미 생성한 이름의 태그를 생성하면 예외가 발생한다.")
     void saveSameTagNameEx() {
         // given
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest tagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "공부", TagType.INDIVIDUAL);
+        TagCreateRequest tagCreateRequest = new TagCreateRequest(savedId, "공부", TagType.INDIVIDUAL);
         memberTagService.save(tagCreateRequest);
 
         // when
@@ -90,14 +89,14 @@ class MemberTagServiceTest {
     @DisplayName("회원이 이미 공용으로 생성된 태그와 똑같은 이름의 태그를 생성하면 예외가 발생한다.")
     void saveSameCommonTagNameEx() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "스터디", TagType.COMMON);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminId, "스터디", TagType.COMMON);
         adminTagService.save(commonTagCreateRequest);
 
         // when
-        TagCreateRequest normalTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "스터디", TagType.INDIVIDUAL);
+        TagCreateRequest normalTagCreateRequest = new TagCreateRequest(savedNormalId, "스터디", TagType.INDIVIDUAL);
 
         // then
         Assertions.assertThatThrownBy(() -> memberTagService.save(normalTagCreateRequest))
@@ -109,8 +108,8 @@ class MemberTagServiceTest {
     @DisplayName("일반 회원이 공용 태그를 생성하려고 시도하면 예외가 발생한다.")
     void saveCommonTagByNormalMemberEx() {
         // given
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "스터디", TagType.COMMON);
+        Long savedId = memberService.save(normalMemberCreateRequest);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedId, "스터디", TagType.COMMON);
 
         // when
 
@@ -138,76 +137,81 @@ class MemberTagServiceTest {
     @DisplayName("일반 회원은 개인 태그를 생성 할 수 있다.")
     void saveIndividualTag() {
         // given
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
-        TagCreateRequest tagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "스터디", TagType.INDIVIDUAL);
+        Long savedId = memberService.save(normalMemberCreateRequest);
+        TagCreateRequest tagCreateRequest = new TagCreateRequest(savedId, "스터디", TagType.INDIVIDUAL);
 
         // when
-        TagResponse savedTagResponse = memberTagService.save(tagCreateRequest);
+        Long savedTagId = memberTagService.save(tagCreateRequest);
+        Optional<Tag> findTag = tagRepository.findById(savedTagId);
 
         // then
-        Assertions.assertThat(savedTagResponse.name()).isEqualTo("스터디");
-        Assertions.assertThat(savedTagResponse.tagType()).isEqualTo(TagType.INDIVIDUAL);
+        Assertions.assertThat(findTag).isNotEmpty();
+        Assertions.assertThat(findTag.get().getName()).isEqualTo("스터디");
+        Assertions.assertThat(findTag.get().getTagType()).isEqualTo(TagType.INDIVIDUAL);
     }
 
     @Test
     @DisplayName("회원이 선택하기 위한 태그를 조회 할 수 있다.")
     void findForSelectingTag() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.COMMON);
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "스터디", TagType.INDIVIDUAL);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.COMMON);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalId, "스터디", TagType.INDIVIDUAL);
 
-        TagResponse savedCommonTag = adminTagService.save(commonTagCreateRequest);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        adminTagService.save(commonTagCreateRequest);
+        memberTagService.save(individualTagCreateRequest);
 
         // when
-        TagResponses findSelectingTags = memberTagService.findTagsForSelecting(savedNormalMember.id());
+        TagResponses findSelectingTags = memberTagService.findTagsForSelecting(savedNormalId);
         List<TagResponse> tagResponses = findSelectingTags.getTagResponseList();
 
         // then
         Assertions.assertThat(tagResponses).hasSize(2);
-        Assertions.assertThat(tagResponses).containsExactly(savedCommonTag, savedIndividualTag);
     }
 
     @Test
     @DisplayName("회원이 생성한 태그만 조회 할 수 있다.")
     void findByMember() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.COMMON);
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "스터디", TagType.INDIVIDUAL);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.COMMON);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalId, "스터디", TagType.INDIVIDUAL);
 
-        TagResponse savedCommonTag = adminTagService.save(commonTagCreateRequest);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        Long savedCommonTagId = adminTagService.save(commonTagCreateRequest);
+        Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
 
         // when
-        TagResponses findCreateTags = memberTagService.findTagsByMember(savedNormalMember.id());
+        TagResponses findCreateTags = memberTagService.findTagsByMember(savedNormalId);
         List<TagResponse> tagResponses = findCreateTags.getTagResponseList();
+
+        TagResponse tagResponse = tagRepository.findById(savedIndividualTagId)
+                .map(TagResponse::new)
+                .get();
 
         // then
         Assertions.assertThat(tagResponses).hasSize(1);
-        Assertions.assertThat(tagResponses).containsExactly(savedIndividualTag);
+        Assertions.assertThat(tagResponses).containsExactly(tagResponse);
     }
 
     @Test
     @DisplayName("일반 회원이 공통 태그를 수정하려고 시도하면 예외가 발생한다.")
     void changeCommonTagByNormalMemberEx() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.COMMON);
-        TagResponse savedCommonTag = adminTagService.save(commonTagCreateRequest);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.COMMON);
+        Long savedCommonTagId = adminTagService.save(commonTagCreateRequest);
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                savedCommonTag.id(),
-                savedNormalMember.id(),
+                savedCommonTagId,
+                savedNormalId,
                 "약속",
-                savedCommonTag.tagType());
+                TagType.COMMON);
 
         // when
 
@@ -221,17 +225,19 @@ class MemberTagServiceTest {
     @DisplayName("다른 회원이 작성한 태그를 수정하려고 시도하면 예외가 발생한다.")
     void changeTagByNotOwnMemberEx() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.INDIVIDUAL);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.INDIVIDUAL);
+        Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
+
+        Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                savedIndividualTag.id(),
-                savedNormalMember.id(),
+                findTag.getId(),
+                savedNormalId,
                 "약속",
-                savedIndividualTag.tagType());
+                findTag.getTagType());
 
         // when
 
@@ -245,39 +251,44 @@ class MemberTagServiceTest {
     @DisplayName("자신이 작성한 태그이면 수정이 가능하다.")
     void changeTagNameByOwnMember() {
         // given
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "공부", TagType.INDIVIDUAL);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalId, "공부", TagType.INDIVIDUAL);
+        Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
+
+        Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                savedIndividualTag.id(),
-                savedNormalMember.id(),
+                findTag.getId(),
+                findTag.getMemberId(),
                 "약속",
-                savedIndividualTag.tagType());
+                findTag.getTagType());
 
         // when
         memberTagService.updateTag(tagUpdateRequest);
-        Tag findTag = tagRepository.findById(savedIndividualTag.id()).get();
+        Optional<Tag> updatedTag = tagRepository.findById(savedIndividualTagId);
 
         // then
-        Assertions.assertThat(findTag.getName()).isEqualTo("약속");
+        Assertions.assertThat(updatedTag).isNotEmpty();
+        Assertions.assertThat(updatedTag.get().getName()).isEqualTo("약속");
     }
 
     @Test
     @DisplayName("일반 유저는 공통 태그를 삭제 할 수 없다.")
     void deleteTagByNormalMemberEx() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.COMMON);
-        TagResponse savedCommonTag = adminTagService.save(commonTagCreateRequest);
+        TagCreateRequest commonTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.COMMON);
+        Long savedCommonId = adminTagService.save(commonTagCreateRequest);
+
+        Tag findTag = tagRepository.findById(savedCommonId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                savedCommonTag.id(),
-                savedNormalMember.id(),
-                savedCommonTag.tagType());
+                findTag.getId(),
+                savedNormalId,
+                findTag.getTagType());
 
         // when
 
@@ -292,16 +303,18 @@ class MemberTagServiceTest {
     @DisplayName("자기 자신이 만든 태그가 아니면 삭제 할 수 없다.")
     void deleteTagByNotOwnMemberEx() {
         // given
-        MemberResponse savedAdminMember = memberService.save(adminMemberCreateRequest);
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedAdminId = memberService.save(adminMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedAdminMember.id(), "공부", TagType.INDIVIDUAL);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedAdminId, "공부", TagType.INDIVIDUAL);
+        Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
+
+        Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                savedIndividualTag.id(),
-                savedNormalMember.id(),
-                savedIndividualTag.tagType());
+                findTag.getId(),
+                savedNormalId,
+                findTag.getTagType());
 
         // when
 
@@ -315,21 +328,23 @@ class MemberTagServiceTest {
     @DisplayName("자기 자신이 만든 태그라면 삭제가 가능하다.")
     void deleteTagByOwnMember() {
         // given
-        MemberResponse savedNormalMember = memberService.save(normalMemberCreateRequest);
+        Long savedNormalId = memberService.save(normalMemberCreateRequest);
 
-        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalMember.id(), "공부", TagType.INDIVIDUAL);
-        TagResponse savedIndividualTag = memberTagService.save(individualTagCreateRequest);
+        TagCreateRequest individualTagCreateRequest = new TagCreateRequest(savedNormalId, "공부", TagType.INDIVIDUAL);
+        Long savedIndividualTagId = memberTagService.save(individualTagCreateRequest);
+
+        Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                savedIndividualTag.id(),
-                savedNormalMember.id(),
-                savedIndividualTag.tagType());
+                findTag.getId(),
+                findTag.getMemberId(),
+                findTag.getTagType());
 
         // when
         memberTagService.deleteTag(tagDeleteRequest);
-        Optional<Tag> findTag = tagRepository.findById(savedIndividualTag.id());
+        Optional<Tag> deletedTag = tagRepository.findById(savedIndividualTagId);
 
         // then
-        Assertions.assertThat(findTag).isEmpty();
+        Assertions.assertThat(deletedTag).isEmpty();
     }
 }

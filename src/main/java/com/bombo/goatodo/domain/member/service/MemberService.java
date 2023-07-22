@@ -25,11 +25,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberResponse save(MemberCreateRequest memberCreateRequest) {
+    public Long save(MemberCreateRequest memberCreateRequest) {
         Member requestMember = memberCreateRequest.toEntity();
         validateDuplicatedMember(requestMember);
+
         Member savedMember = memberRepository.save(requestMember);
-        return new MemberResponse(savedMember);
+        return savedMember.getId();
     }
 
     public MembersResponse findAll() {
