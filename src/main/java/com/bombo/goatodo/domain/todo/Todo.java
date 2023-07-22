@@ -67,6 +67,28 @@ public class Todo extends BaseEntity {
         this.isActive = isActive;
     }
 
+    public Long getMemberId() {
+        return this.member.getId();
+    }
+
+    public boolean getActive() {
+        return this.isActive;
+    }
+
+    public boolean isOwnTodo(Member member) {
+        return this.member.isSameMember(member.getAccount());
+    }
+
+    public void updateTodo(Todo todo) {
+        this.tag = todo.getTag();
+        this.title = todo.getTitle();
+        this.description = todo.getDescription();
+    }
+
+    public void changeCompleteStatus(CompleteStatus completeStatus) {
+        this.completeStatus = completeStatus;
+    }
+
     public void changeCreatedAtForTest(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }

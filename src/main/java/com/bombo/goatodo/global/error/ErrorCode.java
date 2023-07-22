@@ -16,6 +16,8 @@ public enum ErrorCode {
 
     TAG_DUPLICATE(HttpStatus.BAD_REQUEST, "중복된 이름의 태그는 생성 할 수 없습니다."),
 
+    NOT_ACTIVE(HttpStatus.BAD_REQUEST, "기간이 지난 Todo는 수정이 불가능합니다."),
+
     // FORBIDDEN
     CREATE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "생성 할 수 있는 권한이 없습니다."),
     READ_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "조회 할 수 있는 권한이 없습니다."),
