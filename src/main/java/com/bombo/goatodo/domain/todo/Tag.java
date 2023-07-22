@@ -1,6 +1,7 @@
 package com.bombo.goatodo.domain.todo;
 
 import com.bombo.goatodo.domain.member.Member;
+import com.bombo.goatodo.global.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
         })
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Tag {
+public class Tag extends BaseEntity {
 
     @Id
     @GeneratedValue
