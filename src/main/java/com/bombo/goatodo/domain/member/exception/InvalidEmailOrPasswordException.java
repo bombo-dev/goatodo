@@ -1,4 +1,4 @@
-package com.bombo.goatodo.global.exception;
+package com.bombo.goatodo.domain.member.exception;
 
 import com.bombo.goatodo.global.error.ErrorCode;
 
