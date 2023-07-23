@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     // BAD_REQUEST
+    INVALID_ARGUMENT(HttpStatus.BAD_REQUEST, "잘못된 인자가 전달되었습니다."),
     NOT_EXIST_ID_REQUEST(HttpStatus.BAD_REQUEST, "잘못된 ID가 전달되었습니다."),
 
     MEMBER_LOGIN_FAILED(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 틀렸습니다."),
@@ -31,5 +32,13 @@ public enum ErrorCode {
     ErrorCode(HttpStatus errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
+    }
+
+    public HttpStatus getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
