@@ -31,7 +31,7 @@ public class Todo extends BaseEntity {
 
     @NotNull(message = "Todo 작성 시 태그는 필수 입니다.")
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 
     @NotBlank(message = "Todo 작성 시 제목은 공백이거나 null 이면 안됩니다.")
@@ -44,7 +44,7 @@ public class Todo extends BaseEntity {
     private String description;
 
     @NotNull(message = "Todo 진행 상태는 null 일 수 없습니다.")
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "complete_status", nullable = false)
     private CompleteStatus completeStatus;
 

@@ -210,8 +210,8 @@ class MemberTagServiceTest {
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
                 savedCommonTagId,
                 savedNormalId,
-                "약속",
-                TagType.COMMON);
+                "약속"
+        );
 
         // when
 
@@ -236,8 +236,8 @@ class MemberTagServiceTest {
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
                 findTag.getId(),
                 savedNormalId,
-                "약속",
-                findTag.getTagType());
+                "약속"
+        );
 
         // when
 
@@ -261,8 +261,8 @@ class MemberTagServiceTest {
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
                 findTag.getId(),
                 findTag.getMemberId(),
-                "약속",
-                findTag.getTagType());
+                "약속"
+        );
 
         // when
         memberTagService.updateTag(tagUpdateRequest);
@@ -287,8 +287,8 @@ class MemberTagServiceTest {
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
                 findTag.getId(),
-                savedNormalId,
-                findTag.getTagType());
+                savedNormalId
+        );
 
         // when
 
@@ -313,8 +313,8 @@ class MemberTagServiceTest {
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
                 findTag.getId(),
-                savedNormalId,
-                findTag.getTagType());
+                savedNormalId
+        );
 
         // when
 
@@ -337,8 +337,8 @@ class MemberTagServiceTest {
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
                 findTag.getId(),
-                findTag.getMemberId(),
-                findTag.getTagType());
+                findTag.getMemberId()
+        );
 
         // when
         memberTagService.deleteTag(tagDeleteRequest);

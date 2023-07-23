@@ -52,7 +52,7 @@ public class TodoService {
                 .build();
     }
 
-    private TodoResponse findOne(TodoReadRequest todoReadRequest) {
+    public TodoResponse findOne(TodoReadRequest todoReadRequest) {
         Todo findTodo = todoRepository.findById(todoReadRequest.todoId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
@@ -63,8 +63,8 @@ public class TodoService {
         return new TodoResponse(findTodo);
     }
 
-    private TodosResponse findAll(TodoReadRequest todoReadRequest) {
-        List<TodoResponse> findTodoList = todoRepository.findAllByMember_Id(todoReadRequest.memberId())
+    public TodosResponse findAllByMember(Long memberId) {
+        List<TodoResponse> findTodoList = todoRepository.findAllByMember_Id(memberId)
                 .stream()
                 .map(TodoResponse::new)
                 .toList();

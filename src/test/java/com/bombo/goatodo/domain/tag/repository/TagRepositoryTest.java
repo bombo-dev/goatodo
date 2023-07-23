@@ -50,6 +50,7 @@ class TagRepositoryTest {
         // given
         Tag tag = Tag.builder()
                 .name("수업")
+                .tagType(TagType.COMMON)
                 .build();
 
         // when
@@ -70,6 +71,7 @@ class TagRepositoryTest {
         Tag tag = Tag.builder()
                 .name("수업")
                 .member(savedMember)
+                .tagType(TagType.INDIVIDUAL)
                 .build();
 
         // when
