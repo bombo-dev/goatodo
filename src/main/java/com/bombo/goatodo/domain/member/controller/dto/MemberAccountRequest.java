@@ -2,12 +2,9 @@ package com.bombo.goatodo.domain.member.controller.dto;
 
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.util.RegexPattern;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record MemberAccountRequest(
-        @NotNull(message = "id는 Null 일 수 없습니다.")
-        Long id,
 
         @Pattern(regexp = RegexPattern.EMAIL_REGEX,
                 message = "적절한 이메일 양식대로 입력해주세요. ex) goatodo@example.com")
@@ -18,7 +15,7 @@ public record MemberAccountRequest(
         String password
 ) {
 
-    public Account toEntity() {
+    public Account toAccount() {
         return Account.builder()
                 .email(email)
                 .password(password)

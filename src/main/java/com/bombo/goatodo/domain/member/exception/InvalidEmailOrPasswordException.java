@@ -1,13 +1,12 @@
 package com.bombo.goatodo.domain.member.exception;
 
 import com.bombo.goatodo.global.error.ErrorCode;
+import com.bombo.goatodo.global.exception.RestApiException;
 
-public class InvalidEmailOrPasswordException extends IllegalArgumentException {
+public class InvalidEmailOrPasswordException extends RestApiException {
 
-    private ErrorCode errorCode;
 
     public InvalidEmailOrPasswordException(ErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
-        this.errorCode = errorCode;
+        super(errorCode);
     }
 }

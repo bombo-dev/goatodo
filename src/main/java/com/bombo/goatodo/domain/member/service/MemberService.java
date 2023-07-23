@@ -65,8 +65,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void updatePassword(MemberAccountRequest memberAccountRequest) {
-        Member findMember = memberRepository.findById(memberAccountRequest.id())
+    public void updatePassword(Long memberId, MemberAccountRequest memberAccountRequest) {
+        Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         if (findMember.isSamePassword(memberAccountRequest.password())) {
@@ -81,10 +81,10 @@ public class MemberService {
 
     @Transactional
     public void updateProfile(MemberUpdateRequest memberUpdateRequest) {
-        validateDuplicatedNickname(memberUpdateRequest.nickname());
-
         Member findMember = memberRepository.findById(memberUpdateRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        validateDuplicatedNickname(memberUpdateRequest.nickname());
 
         findMember.changeProfile(memberUpdateRequest.nickname(), memberUpdateRequest.occupation());
     }
@@ -98,8 +98,8 @@ public class MemberService {
     }
 
     private void validateDuplicatedMember(Member requestMember) {
-        validateDuplicatedNickname(requestMember.getNickname());
         validateDuplicatedEmail(requestMember.getAccount().getEmail());
+        validateDuplicatedNickname(requestMember.getNickname());
     }
 
     private void validateDuplicatedEmail(String email) {

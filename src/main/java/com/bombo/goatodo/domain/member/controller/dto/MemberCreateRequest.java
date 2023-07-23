@@ -27,7 +27,6 @@ public record MemberCreateRequest(
         @NotNull(message = "회원의 직업은 null 일 수 없습니다.")
         Occupation occupation,
 
-        @NotNull(message = "회원의 권한은 null 일 수 없습니다.")
         Role role
 ) {
     public Member toEntity() {

@@ -302,12 +302,12 @@ class MemberServiceTest {
         Long savedId = memberService.save(memberCreateRequest);
 
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(savedId, "new@email.com", "password123");
+                new MemberAccountRequest("new@email.com", "password123");
 
         // when
 
         // then
-        Assertions.assertThatThrownBy(() -> memberService.updatePassword(memberAccountRequest))
+        Assertions.assertThatThrownBy(() -> memberService.updatePassword(savedId, memberAccountRequest))
                 .isInstanceOf(RoleException.class)
                 .hasMessage("수정 할 수 있는 권한이 없습니다.");
     }
@@ -330,10 +330,10 @@ class MemberServiceTest {
         // when
 
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(findMember.id(), findMember.email(), "password1234");
+                new MemberAccountRequest(findMember.email(), "password1234");
 
         // then
-        Assertions.assertThatThrownBy(() -> memberService.updatePassword(memberAccountRequest))
+        Assertions.assertThatThrownBy(() -> memberService.updatePassword(findMember.id(), memberAccountRequest))
                 .isInstanceOf(DuplicateException.class)
                 .hasMessage("동일한 패스워드로 변경은 불가능합니다.");
     }
@@ -355,8 +355,8 @@ class MemberServiceTest {
 
         // when
         MemberAccountRequest memberAccountRequest =
-                new MemberAccountRequest(findMember.id(), findMember.email(), "password123");
-        memberService.updatePassword(memberAccountRequest);
+                new MemberAccountRequest(findMember.email(), "password123");
+        memberService.updatePassword(findMember.id(), memberAccountRequest);
 
         MemberResponse updatedMember = memberService.findOne(savedId);
 
