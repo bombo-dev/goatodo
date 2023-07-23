@@ -8,6 +8,8 @@ import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
 import com.bombo.goatodo.domain.todo.controller.dto.TagDeleteRequest;
 import com.bombo.goatodo.domain.todo.controller.dto.TagUpdateRequest;
 import com.bombo.goatodo.domain.todo.repository.TagRepository;
+import com.bombo.goatodo.domain.todo.service.dto.TagResponse;
+import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.DuplicateException;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
@@ -15,6 +17,8 @@ import com.bombo.goatodo.global.exception.RoleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +28,7 @@ public class AdminTagService {
     private final MemberRepository memberRepository;
     private final TagRepository tagRepository;
 
+    @Transactional
     public Long save(TagCreateRequest tagCreateRequest) {
         validateDuplicatedCategory(tagCreateRequest.name());
         Member findMember = memberRepository.findById(tagCreateRequest.memberId())
@@ -31,7 +36,6 @@ public class AdminTagService {
         validateRole(findMember);
 
         Tag tag = Tag.builder()
-                .member(findMember)
                 .name(tagCreateRequest.name())
                 .tagType(TagType.COMMON)
                 .build();
@@ -41,6 +45,16 @@ public class AdminTagService {
         return savedTag.getId();
     }
 
+    public TagsResponse findAll() {
+        List<TagResponse> findTagResponse = tagRepository.findAll()
+                .stream()
+                .map(TagResponse::new)
+                .toList();
+
+        return new TagsResponse(findTagResponse);
+    }
+
+    @Transactional
     public void updateCategory(TagUpdateRequest tagUpdateRequest) {
         validateDuplicatedCategory(tagUpdateRequest.name());
         Member findMember = memberRepository.findById(tagUpdateRequest.memberId())
@@ -53,6 +67,7 @@ public class AdminTagService {
         findTag.changeTag(tagUpdateRequest.name());
     }
 
+    @Transactional
     public void deleteCategory(TagDeleteRequest tagDeleteRequest) {
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));

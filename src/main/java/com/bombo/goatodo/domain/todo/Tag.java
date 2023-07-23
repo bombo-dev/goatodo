@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Tag extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -65,7 +65,7 @@ public class Tag extends BaseEntity {
         return null;
     }
 
-    public void changeTag(String tag) {
-        this.name = tag;
+    public void changeTag(String name) {
+        this.name = name;
     }
 }

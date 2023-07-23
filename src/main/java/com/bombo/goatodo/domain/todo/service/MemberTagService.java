@@ -65,10 +65,10 @@ public class MemberTagService {
     }
 
     public void updateTag(TagUpdateRequest tagUpdateRequest) {
-        validateRole(tagUpdateRequest.tagType(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
-
         Tag findTag = tagRepository.findById(tagUpdateRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        validateRole(findTag.getTagType(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
         Member findMember = memberRepository.findById(tagUpdateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
@@ -78,9 +78,11 @@ public class MemberTagService {
     }
 
     public void deleteTag(TagDeleteRequest tagDeleteRequest) {
-        validateRole(tagDeleteRequest.tagType(), ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
         Tag findTag = tagRepository.findById(tagDeleteRequest.id())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        validateRole(findTag.getTagType(), ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
+
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
