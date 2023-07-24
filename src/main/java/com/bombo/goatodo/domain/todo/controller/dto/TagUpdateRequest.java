@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record TagUpdateRequest(
-        @NotNull(message = "태그 id는 null 일 수 없습니다.")
-        Long id,
-
         @NotNull(message = "회원 id는 null 일 수 없습니다.")
         Long memberId,
 

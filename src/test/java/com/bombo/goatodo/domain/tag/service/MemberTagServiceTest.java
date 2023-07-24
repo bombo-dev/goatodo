@@ -208,7 +208,6 @@ class MemberTagServiceTest {
         Long savedCommonTagId = adminTagService.save(commonTagCreateRequest);
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                savedCommonTagId,
                 savedNormalId,
                 "약속"
         );
@@ -216,7 +215,7 @@ class MemberTagServiceTest {
         // when
 
         // then
-        Assertions.assertThatThrownBy(() -> memberTagService.updateTag(tagUpdateRequest))
+        Assertions.assertThatThrownBy(() -> memberTagService.updateTag(savedCommonTagId, tagUpdateRequest))
                 .isInstanceOf(RoleException.class)
                 .hasMessage("수정 할 수 있는 권한이 없습니다.");
     }
@@ -234,7 +233,6 @@ class MemberTagServiceTest {
         Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                findTag.getId(),
                 savedNormalId,
                 "약속"
         );
@@ -242,7 +240,7 @@ class MemberTagServiceTest {
         // when
 
         // then
-        Assertions.assertThatThrownBy(() -> memberTagService.updateTag(tagUpdateRequest))
+        Assertions.assertThatThrownBy(() -> memberTagService.updateTag(findTag.getId(), tagUpdateRequest))
                 .isInstanceOf(RoleException.class)
                 .hasMessage("수정 할 수 있는 권한이 없습니다.");
     }
@@ -259,13 +257,12 @@ class MemberTagServiceTest {
         Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagUpdateRequest tagUpdateRequest = new TagUpdateRequest(
-                findTag.getId(),
                 findTag.getMemberId(),
                 "약속"
         );
 
         // when
-        memberTagService.updateTag(tagUpdateRequest);
+        memberTagService.updateTag(findTag.getId(), tagUpdateRequest);
         Optional<Tag> updatedTag = tagRepository.findById(savedIndividualTagId);
 
         // then
@@ -286,7 +283,6 @@ class MemberTagServiceTest {
         Tag findTag = tagRepository.findById(savedCommonId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                findTag.getId(),
                 savedNormalId
         );
 
@@ -294,7 +290,7 @@ class MemberTagServiceTest {
 
 
         // then
-        Assertions.assertThatThrownBy(() -> memberTagService.deleteTag(tagDeleteRequest))
+        Assertions.assertThatThrownBy(() -> memberTagService.deleteTag(findTag.getId(), tagDeleteRequest))
                 .isInstanceOf(RoleException.class)
                 .hasMessage("삭제 할 수 있는 권한이 없습니다.");
     }
@@ -312,14 +308,13 @@ class MemberTagServiceTest {
         Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                findTag.getId(),
                 savedNormalId
         );
 
         // when
 
         // then
-        Assertions.assertThatThrownBy(() -> memberTagService.deleteTag(tagDeleteRequest))
+        Assertions.assertThatThrownBy(() -> memberTagService.deleteTag(findTag.getId(), tagDeleteRequest))
                 .isInstanceOf(RoleException.class)
                 .hasMessage("삭제 할 수 있는 권한이 없습니다.");
     }
@@ -336,12 +331,11 @@ class MemberTagServiceTest {
         Tag findTag = tagRepository.findById(savedIndividualTagId).get();
 
         TagDeleteRequest tagDeleteRequest = new TagDeleteRequest(
-                findTag.getId(),
                 findTag.getMemberId()
         );
 
         // when
-        memberTagService.deleteTag(tagDeleteRequest);
+        memberTagService.deleteTag(findTag.getId(), tagDeleteRequest);
         Optional<Tag> deletedTag = tagRepository.findById(savedIndividualTagId);
 
         // then

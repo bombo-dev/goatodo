@@ -41,14 +41,14 @@ public class TagController {
 
     @PostMapping("/tag/{id}")
     public ResponseEntity<Void> updateTag(@PathVariable Long id, @Validated @RequestBody TagUpdateRequest tagUpdateRequest) {
-        memberTagService.updateTag(tagUpdateRequest);
+        memberTagService.updateTag(id, tagUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/tag/{id}")
     public ResponseEntity<Void> deleteTag(@PathVariable Long id, @Validated @RequestBody TagDeleteRequest tagDeleteRequest) {
-        memberTagService.deleteTag(tagDeleteRequest);
+        memberTagService.deleteTag(id, tagDeleteRequest);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

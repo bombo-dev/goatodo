@@ -30,7 +30,7 @@ public class AdminTagService {
 
     @Transactional
     public Long save(TagCreateRequest tagCreateRequest) {
-        validateDuplicatedCategory(tagCreateRequest.name());
+        validateDuplicatedTag(tagCreateRequest.name());
         Member findMember = memberRepository.findById(tagCreateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         validateRole(findMember);
@@ -55,40 +55,40 @@ public class AdminTagService {
     }
 
     @Transactional
-    public void updateCategory(TagUpdateRequest tagUpdateRequest) {
-        validateDuplicatedCategory(tagUpdateRequest.name());
+    public void updateTag(Long id, TagUpdateRequest tagUpdateRequest) {
+        validateDuplicatedTag(tagUpdateRequest.name());
         Member findMember = memberRepository.findById(tagUpdateRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         validateRole(findMember);
 
-        Tag findTag = tagRepository.findById(tagUpdateRequest.id())
+        Tag findTag = tagRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         findTag.changeTag(tagUpdateRequest.name());
     }
 
     @Transactional
-    public void deleteCategory(TagDeleteRequest tagDeleteRequest) {
+    public void deleteTag(Long id, TagDeleteRequest tagDeleteRequest) {
         Member findMember = memberRepository.findById(tagDeleteRequest.memberId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         validateRole(findMember);
 
-        Tag findTag = tagRepository.findById(tagDeleteRequest.id())
+        Tag findTag = tagRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         tagRepository.delete(findTag);
+    }
+
+    private void validateDuplicatedTag(String name) {
+        tagRepository.existSameCommonTag(name)
+                .ifPresent((tag) -> {
+                    throw new DuplicateException(ErrorCode.TAG_DUPLICATE);
+                });
     }
 
     private void validateRole(Member member) {
         if (member.isNormal()) {
             throw new RoleException(ErrorCode.CREATE_REQUEST_IS_FORBIDDEN);
         }
-    }
-
-    private void validateDuplicatedCategory(String name) {
-        tagRepository.existSameCommonTag(name)
-                .ifPresent((tag) -> {
-                    throw new DuplicateException(ErrorCode.TAG_DUPLICATE);
-                });
     }
 }

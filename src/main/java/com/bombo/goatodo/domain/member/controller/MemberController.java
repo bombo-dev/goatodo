@@ -70,7 +70,7 @@ public class MemberController {
     @PostMapping("/member/{id}/modify/profile")
     public ResponseEntity<Void> modifyProfile(@PathVariable Long id,
                                               @Validated @RequestBody MemberUpdateRequest memberUpdateRequest) {
-        memberService.updateProfile(memberUpdateRequest);
+        memberService.updateProfile(id, memberUpdateRequest);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

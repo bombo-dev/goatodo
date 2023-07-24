@@ -26,6 +26,10 @@ public class Member extends BaseEntity {
     @Embedded
     private Account account;
 
+    @Valid
+    @Embedded
+    private SlackInfo slackInfo;
+
     @NotBlank(message = "회원의 닉네임은 null 이거나 공백 일 수 없습니다.")
     @Size(min = 2, max = 15, message = "닉네임은 2글자 이상 15자 이내여야 합니다.")
     @Column(name = "nickname", length = 15, nullable = false, unique = true)

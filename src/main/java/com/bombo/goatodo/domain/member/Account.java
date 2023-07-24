@@ -4,16 +4,12 @@ import com.bombo.goatodo.util.RegexPattern;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Pattern;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.util.Objects;
+import lombok.*;
 
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class Account {
 
     @Pattern(regexp = RegexPattern.EMAIL_REGEX,
@@ -37,18 +33,5 @@ public class Account {
 
     public boolean equalsPassword(String password) {
         return this.password.equals(password);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Account account = (Account) o;
-        return Objects.equals(getEmail(), account.getEmail()) && Objects.equals(getPassword(), account.getPassword());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getEmail(), getPassword());
     }
 }
