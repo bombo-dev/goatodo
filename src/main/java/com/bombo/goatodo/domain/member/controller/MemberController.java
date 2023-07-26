@@ -3,6 +3,7 @@ package com.bombo.goatodo.domain.member.controller;
 import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberUpdateRequest;
+import com.bombo.goatodo.domain.member.controller.dto.SlackInfoRequest;
 import com.bombo.goatodo.domain.member.service.MemberService;
 import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
 import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
@@ -72,6 +73,13 @@ public class MemberController {
                                               @Validated @RequestBody MemberUpdateRequest memberUpdateRequest) {
         memberService.updateProfile(id, memberUpdateRequest);
 
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/member/{id}/modify/slack")
+    public ResponseEntity<Void> interLockSlack(@PathVariable Long id,
+                                               @Validated @RequestBody SlackInfoRequest slackInfoRequest) {
+        memberService.updateSlackInfo(id, slackInfoRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

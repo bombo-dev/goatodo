@@ -244,7 +244,6 @@ class MemberServiceTest {
         Long savedId = memberService.save(memberCreateRequestB);
 
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
-                savedId,
                 "고투두",
                 Occupation.ELEMENTARY_SCHOOL_STUDENT
         );
@@ -252,7 +251,7 @@ class MemberServiceTest {
         // when
 
         // then
-        Assertions.assertThatThrownBy(() -> memberService.updateProfile(memberUpdateRequest))
+        Assertions.assertThatThrownBy(() -> memberService.updateProfile(savedId, memberUpdateRequest))
                 .isInstanceOf(DuplicateException.class)
                 .hasMessage("닉네임이 중복되었습니다.");
     }
@@ -273,12 +272,11 @@ class MemberServiceTest {
 
         // when
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
-                savedId,
                 "희귀닉네임",
                 Occupation.ELEMENTARY_SCHOOL_STUDENT
         );
 
-        memberService.updateProfile(memberUpdateRequest);
+        memberService.updateProfile(savedId, memberUpdateRequest);
         MemberResponse findMember = memberService.findOne(savedId);
 
         // then

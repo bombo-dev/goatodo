@@ -21,8 +21,18 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<ErrorResponse> handleInvalidRequestException(RestApiException e) {
-        return ResponseEntity.status(e.getErrorCode().getErrorCode())
-                .body(makeErrorResponse(e.getErrorCode()));
+        return handleExceptionInternal(e.getErrorCode());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> InternalServerErrorException(Exception e) {
+        ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
+        return handleExceptionInternal(errorCode);
+    }
+
+    private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorCode errorCode) {
+        return ResponseEntity.status(errorCode.getErrorCode())
+                .body(makeErrorResponse(errorCode));
     }
 
     private ErrorResponse makeErrorResponse(ErrorCode errorCode) {

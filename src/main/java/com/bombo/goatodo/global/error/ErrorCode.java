@@ -24,7 +24,10 @@ public enum ErrorCode {
     CREATE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "생성 할 수 있는 권한이 없습니다."),
     READ_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "조회 할 수 있는 권한이 없습니다."),
     EDIT_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "수정 할 수 있는 권한이 없습니다."),
-    DELETE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "삭제 할 수 있는 권한이 없습니다.");
+    DELETE_REQUEST_IS_FORBIDDEN(HttpStatus.FORBIDDEN, "삭제 할 수 있는 권한이 없습니다."),
+
+    // INTERNAL_SERVER_ERROR
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "모종의 이유로 서버에서 처리하지 못했습니다.");
 
     private final HttpStatus errorCode;
     private final String errorMessage;

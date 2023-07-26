@@ -2,9 +2,11 @@ package com.bombo.goatodo.domain.member.service;
 
 import com.bombo.goatodo.domain.member.Account;
 import com.bombo.goatodo.domain.member.Member;
+import com.bombo.goatodo.domain.member.SlackInfo;
 import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
 import com.bombo.goatodo.domain.member.controller.dto.MemberUpdateRequest;
+import com.bombo.goatodo.domain.member.controller.dto.SlackInfoRequest;
 import com.bombo.goatodo.domain.member.exception.InvalidEmailOrPasswordException;
 import com.bombo.goatodo.domain.member.repository.MemberRepository;
 import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
@@ -80,13 +82,21 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateProfile(MemberUpdateRequest memberUpdateRequest) {
-        Member findMember = memberRepository.findById(memberUpdateRequest.id())
+    public void updateProfile(Long id, MemberUpdateRequest memberUpdateRequest) {
+        Member findMember = memberRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         validateDuplicatedNickname(memberUpdateRequest.nickname());
-
         findMember.changeProfile(memberUpdateRequest.nickname(), memberUpdateRequest.occupation());
+    }
+
+    @Transactional
+    public void updateSlackInfo(Long id, SlackInfoRequest slackInfoRequest) {
+        Member findMember = memberRepository.findById(id)
+                .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        SlackInfo slackInfo = slackInfoRequest.toSlackInfo();
+        findMember.interLockSlack(slackInfo);
     }
 
     @Transactional

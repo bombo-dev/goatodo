@@ -65,6 +65,10 @@ public class Member extends BaseEntity {
         this.occupation = occupation;
     }
 
+    public void interLockSlack(SlackInfo slackInfo) {
+        this.slackInfo = slackInfo;
+    }
+
     public boolean isSameEmail(String email) {
         return this.account.equalsEmail(email);
     }
