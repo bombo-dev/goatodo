@@ -1,7 +1,6 @@
 package com.bombo.goatodo.domain.slack.controller;
 
 import com.bombo.goatodo.domain.slack.service.SlackService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +16,15 @@ public class SlackController {
 
     private final SlackService slackService;
 
-    @PostMapping("/slack/{id}")
-    public ResponseEntity<Void> sendDailyMessage(@PathVariable Long id) {
-        try {
-            slackService.sendStartMessageToUser(id);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    @PostMapping("/slack/{id}/daily/start")
+    public ResponseEntity<Void> sendDailyStartMessage(@PathVariable Long id) {
+        slackService.sendStartMessageToUser(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
+    @PostMapping("/slack/{id}/daily/end")
+    public ResponseEntity<Void> sendDailyEndMessage(@PathVariable Long id) {
+        slackService.sendEndDailyMessageToUser(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

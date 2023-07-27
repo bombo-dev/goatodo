@@ -3,6 +3,9 @@ package com.bombo.goatodo.domain.slack.service;
 import com.bombo.goatodo.domain.member.Member;
 import com.bombo.goatodo.domain.member.repository.MemberRepository;
 import com.bombo.goatodo.domain.slack.service.dto.SlackDailyResponse;
+import com.bombo.goatodo.domain.todo.CompleteStatus;
+import com.bombo.goatodo.domain.todo.Todo;
+import com.bombo.goatodo.domain.todo.repository.TodoRepository;
 import com.bombo.goatodo.global.error.ErrorCode;
 import com.bombo.goatodo.global.exception.NotExistIdRequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,9 +13,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -26,14 +35,16 @@ public class SlackService {
     private String slackToken;
 
     private final MemberRepository memberRepository;
+    private final TodoRepository todoRepository;
 
-    public SlackService(MemberRepository memberRepository) {
+    public SlackService(MemberRepository memberRepository, TodoRepository todoRepository) {
         this.memberRepository = memberRepository;
+        this.todoRepository = todoRepository;
     }
 
-    public void sendStartMessageToUser(Long id) throws JsonProcessingException {
+    public void sendStartMessageToUser(Long memberId) {
 
-        Member findMember = memberRepository.findById(id)
+        Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         String url = SLACK_POST_MESSAGE_URL;
@@ -41,22 +52,79 @@ public class SlackService {
         headers.add("Authorization", "Bearer " + slackToken);
         headers.add("Content-type", "application/json; charset=utf-8");
         String authenticationSlackId = getSlackIdByEmail(findMember.getSlackInfo().getSlackEmail());
-        SlackDailyResponse slackDailyResponse = new SlackDailyResponse(authenticationSlackId, DAILY_MESSAGE);
+        String lifeQuotes = LifeQuotesStorage.randomOf();
+        String responseMsg = createResponseMsg(lifeQuotes);
+        SlackDailyResponse slackDailyResponse = new SlackDailyResponse(authenticationSlackId, responseMsg);
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper.writeValueAsString(slackDailyResponse);
+        try {
+            String requestBody = objectMapper.writeValueAsString(slackDailyResponse);
+            HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+            RestTemplate restTemplate = new RestTemplate();
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-        RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    url, HttpMethod.POST, requestEntity, String.class);
+            log.info("body : {} ", responseEntity.getBody());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-        ResponseEntity<String> responseEntity = restTemplate.exchange(
-                url, HttpMethod.POST, requestEntity, String.class);
+    private String createResponseMsg(String lifeQuotes) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(DAILY_MESSAGE).append("\n");
+        stringBuffer.append("오늘의 명언").append("\n");
+        stringBuffer.append(lifeQuotes);
+        return stringBuffer.toString();
+    }
 
-        HttpStatus httpStatus = (HttpStatus) responseEntity.getStatusCode();
-        int status = httpStatus.value();
-        String response = responseEntity.getBody();
-        System.out.println("Response status: " + status);
-        log.info("response : {}", response);
+    public void sendEndDailyMessageToUser(Long memberId) {
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        String url = SLACK_POST_MESSAGE_URL;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + slackToken);
+        headers.add("Content-type", "application/json; charset=utf-8");
+
+        String authenticationSlackId = getSlackIdByEmail(findMember.getSlackInfo().getSlackEmail());
+        double dailyTodoAchievementRate = getDailyTodoAchievementRate(memberId);
+        String dailyMessage = createDailyEndMessage(dailyTodoAchievementRate);
+        SlackDailyResponse slackDailyResponse = new SlackDailyResponse(authenticationSlackId, dailyMessage);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String requestBody = objectMapper.writeValueAsString(slackDailyResponse);
+
+            HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+            RestTemplate restTemplate = new RestTemplate();
+
+            ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    url, HttpMethod.POST, requestEntity, String.class);
+
+            log.info("body : {} ", responseEntity.getBody());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String createDailyEndMessage(double dailyTodoAchievementRate) {
+        return "금일 투두리스트의 성취율은 : " + dailyTodoAchievementRate + "% 입니다.";
+    }
+
+    private double getDailyTodoAchievementRate(Long memberId) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = now.withHour(0).withMinute(0).withSecond(0);
+        LocalDateTime endTime = now.withHour(23).withMinute(59).withSecond(59);
+
+        List<Todo> dailyTodoList = todoRepository.findAllByMember_idAndDateBetween(memberId, startTime, endTime);
+
+        double achievementRate = dailyTodoList.stream()
+                .map(Todo::getCompleteStatus)
+                .mapToDouble(CompleteStatus::getScore)
+                .average()
+                .orElse(0);
+
+        return Math.round(achievementRate * 100) / 100.0;
     }
 
     private String getSlackIdByEmail(String slackEmail) {
@@ -69,6 +137,7 @@ public class SlackService {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
         ResponseEntity<String> responseEntity = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -81,4 +150,6 @@ public class SlackService {
         log.info("JsonObject : {}", userProfile);
         return (String) userProfile.get("id");
     }
+
+
 }
