@@ -3,8 +3,8 @@ slackBotToken: xoxb-2070788189600-5625372662487-YA61hHFqPluXjVcJyG96SLFx
 spring:
   datasource:
     url: jdbc:h2:mem:testdb;MODE=MySQL
-    username: root
-    password: root1234!
+    username: sa
+    password:
     driver-class-name: org.h2.Driver
 
   jpa:
@@ -19,3 +19,4 @@ logging:
     org:
       hibernate:
         SQL: debug
+      springframework: debug
