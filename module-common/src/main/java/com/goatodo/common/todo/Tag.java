@@ -1,11 +1,8 @@
-package com.bombo.goatodo.domain.todo;
+package com.goatodo.common.todo;
 
-import com.bombo.goatodo.domain.base.BaseEntity;
-import com.bombo.goatodo.domain.member.Member;
+import com.goatodo.common.base.BaseEntity;
+import com.goatodo.common.member.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,18 +29,15 @@ public class Tag extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @NotBlank(message = "카테고리는 공백 일 수 없습니다.")
-    @Size(max = 20, message = "카테고리는 20자 이내여야 합니다.")
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @NotNull(message = "태그 타입은 null 일 수 없습니다.")
     @Enumerated(value = EnumType.STRING)
     @Column(name = "tag_type", nullable = false)
     private TagType tagType;
 
     @Builder
-    public Tag(Member member, String name, @NotNull TagType tagType) {
+    public Tag(Member member, String name, TagType tagType) {
         this.member = member;
         this.name = name;
         this.tagType = tagType;

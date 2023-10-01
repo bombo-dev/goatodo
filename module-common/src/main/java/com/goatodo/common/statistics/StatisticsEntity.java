@@ -1,7 +1,7 @@
-package com.bombo.goatodo.domain.statistics;
+package com.goatodo.common.statistics;
 
 
-import com.bombo.goatodo.domain.base.CreatedBaseEntity;
+import com.goatodo.common.base.CreatedBaseEntity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;

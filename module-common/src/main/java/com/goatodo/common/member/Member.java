@@ -1,11 +1,7 @@
-package com.bombo.goatodo.domain.member;
+package com.goatodo.common.member;
 
-import com.bombo.goatodo.domain.base.BaseEntity;
+import com.goatodo.common.base.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,35 +17,28 @@ public class Member extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @NotNull(message = "회원의 계정은 null 일 수 없습니다.")
-    @Valid
     @Embedded
     private Account account;
 
-    @Valid
     @Embedded
     private SlackInfo slackInfo;
 
-    @NotBlank(message = "회원의 닉네임은 null 이거나 공백 일 수 없습니다.")
-    @Size(min = 2, max = 15, message = "닉네임은 2글자 이상 15자 이내여야 합니다.")
     @Column(name = "nickname", length = 15, nullable = false, unique = true)
     private String nickname;
 
-    @NotNull(message = "회원의 직업은 null 일 수 없습니다.")
     @Enumerated(EnumType.STRING)
     @Column(name = "occupation", nullable = false)
     private Occupation occupation;
 
-    @NotNull(message = "회원의 역할은 null 일 수 없습니다.")
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 
     @Builder
-    public Member(@NotNull Account account,
-                  @NotBlank String nickname,
-                  @NotNull Occupation occupation,
-                  @NotNull Role role) {
+    public Member(Account account,
+                  String nickname,
+                  Occupation occupation,
+                  Role role) {
         this.account = account;
         this.nickname = nickname;
         this.occupation = occupation;

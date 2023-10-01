@@ -1,4 +1,4 @@
-package com.bombo.goatodo.global;
+package com.bombo.goatodo.domain.base;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

@@ -1,1 +1,6 @@
 rootProject.name = 'goatodo'
+include 'module-alarm'
+include 'module-api'
+include 'module-application'
+include 'module-common'
+include 'module-infrastructure'
