@@ -65,14 +65,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-project(':module-api') {
+project(':api') {
     dependencies {
-        implementation project(':module-common')
-    }
-}
-
-project(':module-application') {
-    dependencies {
-        implementation project(':module-common')
+        implementation project(':domain')
     }
 }

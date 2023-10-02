@@ -1,0 +1,18 @@
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+}
+
+project(':domain') {
+    dependencies {
+        api project(':common')
+    }
+}
+
+jar {
+    enabled = false
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
