@@ -1,8 +1,13 @@
 package com.goatodo.api.member.presentation;
 
-import com.goatodo.api.application.MemberService;
 import com.goatodo.api.member.presentation.dto.MemberAccountRequest;
 import com.goatodo.api.member.presentation.dto.MemberCreateRequest;
+import com.goatodo.api.member.presentation.dto.MemberUpdateRequest;
+import com.goatodo.api.member.presentation.dto.SlackInfoRequest;
+import com.goatodo.api.member.presentation.interfaces.MemberRequestMapper;
+import com.goatodo.application.member.MemberService;
+import com.goatodo.application.member.dto.MemberResponse;
+import com.goatodo.application.member.dto.MembersResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +24,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final String SESSION_LOGIN_ID = "loginId";
+    private final MemberRequestMapper memberRequestMapper;
     private final MemberService memberService;
 
-    @PostMapping("/member")
+    @PostMapping("/members")
     public ResponseEntity<Void> signUp(@Validated @RequestBody MemberCreateRequest memberCreateRequest) {
 
         memberService.save(memberCreateRequest.toCommand());
@@ -30,17 +36,17 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/member/login")
+    @PostMapping("/members/login")
     public ResponseEntity<Void> login(@Validated @RequestBody MemberAccountRequest memberAccountRequest,
                                       HttpServletRequest httpServletRequest) {
-        Long loginId = memberService.login(memberAccountRequest);
+        Long loginId = memberService.login(memberRequestMapper.toService(memberAccountRequest));
 
         HttpSession httpSession = httpServletRequest.getSession();
         httpSession.setAttribute(SESSION_LOGIN_ID, loginId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/member/logout")
+    @PostMapping("/members/logout")
     public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
 
         HttpSession httpSession = httpServletRequest.getSession(false);
@@ -53,7 +59,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @GetMapping("/member/{id}")
+    @GetMapping("/members/{id}")
     public ResponseEntity<MemberResponse> findOne(@PathVariable Long id) {
         MemberResponse findMemberResponse = memberService.findOne(id);
 
@@ -67,26 +73,26 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(findMembersResponse);
     }
 
-    @PostMapping("/member/{id}/modify/profile")
+    @PatchMapping("/members/{id}/profile")
     public ResponseEntity<Void> modifyProfile(@PathVariable Long id,
                                               @Validated @RequestBody MemberUpdateRequest memberUpdateRequest) {
-        memberService.updateProfile(id, memberUpdateRequest);
+        memberService.updateProfile(id, memberRequestMapper.toService(memberUpdateRequest));
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("/member/{id}/modify/slack")
+    @PatchMapping("/members/{id}/slack")
     public ResponseEntity<Void> interLockSlack(@PathVariable Long id,
                                                @Validated @RequestBody SlackInfoRequest slackInfoRequest) {
-        memberService.updateSlackInfo(id, slackInfoRequest);
+        memberService.updateSlackInfo(id, memberRequestMapper.toService(slackInfoRequest));
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping("member/{id}/modify/password")
+    @PatchMapping("member/{id}/password")
     public ResponseEntity<Void> modifyPassword(@PathVariable Long id,
                                                @Validated @RequestBody MemberAccountRequest memberAccountRequest) {
 
-        memberService.updatePassword(id, memberAccountRequest);
+        memberService.updatePassword(id, memberRequestMapper.toService(memberAccountRequest));
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

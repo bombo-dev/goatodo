@@ -1,8 +1,8 @@
 package com.goatodo.application.member.dto;
 
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.util.FormatConverter;
+import com.goatodo.common.util.FormatConverter;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
 
 public record MemberResponse(
         Long id,

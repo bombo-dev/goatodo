@@ -1,5 +1,7 @@
-package com.goatodo.common.error;
+package com.goatodo.api.advice;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.goatodo.common.error.ErrorCode;
 import lombok.Builder;
 import org.springframework.validation.FieldError;
 

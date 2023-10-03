@@ -1,7 +1,6 @@
 package com.goatodo.api.advice;
 
 import com.goatodo.common.error.ErrorCode;
-import com.goatodo.common.error.ErrorResponse;
 import com.goatodo.common.exception.RestApiException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

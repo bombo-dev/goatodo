@@ -1,6 +1,7 @@
 package com.goatodo.common.exception;
 
-import com.bombo.goatodo.global.error.ErrorCode;
+
+import com.goatodo.common.error.ErrorCode;
 
 public class RoleException extends RestApiException {
 

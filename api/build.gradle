@@ -9,6 +9,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+project(':api') {
+    dependencies {
+        api project(':application')
+    }
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

@@ -1,20 +1,18 @@
 package com.goatodo.application.member;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.SlackInfo;
-import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
-import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
-import com.bombo.goatodo.domain.member.controller.dto.MemberUpdateRequest;
-import com.bombo.goatodo.domain.member.controller.dto.SlackInfoRequest;
-import com.bombo.goatodo.domain.member.exception.InvalidEmailOrPasswordException;
-import com.bombo.goatodo.domain.member.repository.MemberRepository;
-import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
-import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
-import com.bombo.goatodo.global.error.ErrorCode;
-import com.bombo.goatodo.global.exception.DuplicateException;
-import com.bombo.goatodo.global.exception.NotExistIdRequestException;
-import com.bombo.goatodo.global.exception.RoleException;
+import com.goatodo.application.member.dto.MemberResponse;
+import com.goatodo.application.member.dto.MembersResponse;
+import com.goatodo.application.member.dto.request.MemberServiceAccountRequest;
+import com.goatodo.application.member.dto.request.MemberServiceCreateRequest;
+import com.goatodo.application.member.dto.request.MemberServiceSlackInfoRequest;
+import com.goatodo.application.member.dto.request.MemberServiceUpdateRequest;
+import com.goatodo.common.error.ErrorCode;
+import com.goatodo.common.exception.NotExistIdRequestException;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.SlackInfo;
+import com.goatodo.domain.member.exception.InvalidEmailOrPasswordException;
+import com.goatodo.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,26 +25,25 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberValidator memberValidator;
 
     @Transactional
-    public Long save(MemberCreateRequest memberCreateRequest) {
-        Member requestMember = memberCreateRequest.toEntity();
-        validateDuplicatedMember(requestMember);
+    public Long save(MemberServiceCreateRequest request) {
+        Member member = request.toEntity();
+        memberValidator.validateDuplicatedMember(member);
 
-        Member savedMember = memberRepository.save(requestMember);
+        Member savedMember = memberRepository.save(member);
         return savedMember.getId();
     }
 
-    public Long login(MemberAccountRequest memberAccountRequest) {
-        Member findMember = memberRepository.findByAccount_Email(memberAccountRequest.email())
+    public Long login(MemberServiceAccountRequest request) {
+        Member member = memberRepository.findByAccount_Email(request.email())
                 .orElseThrow(() -> new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED));
 
-        Account inputAccount = memberAccountRequest.toAccount();
-        if (!findMember.isSameMember(inputAccount)) {
-            throw new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED);
-        }
+        Account account = request.toVo();
+        member.validSameMember(account);
 
-        return findMember.getId();
+        return member.getId();
     }
 
     public MembersResponse findAll() {
@@ -67,62 +64,36 @@ public class MemberService {
     }
 
     @Transactional
-    public void updatePassword(Long memberId, MemberAccountRequest memberAccountRequest) {
-        Member findMember = memberRepository.findById(memberId)
+    public void updatePassword(Long memberId, MemberServiceAccountRequest request) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (findMember.isSamePassword(memberAccountRequest.password())) {
-            throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_PASSWORD);
-        }
-
-        if (!findMember.isSameEmail(memberAccountRequest.email())) {
-            throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
-        }
-        findMember.changePassword(memberAccountRequest.password());
+        member.changePassword(request.email(), request.password());
     }
 
     @Transactional
-    public void updateProfile(Long id, MemberUpdateRequest memberUpdateRequest) {
-        Member findMember = memberRepository.findById(id)
+    public void updateProfile(Long id, MemberServiceUpdateRequest request) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        validateDuplicatedNickname(memberUpdateRequest.nickname());
-        findMember.changeProfile(memberUpdateRequest.nickname(), memberUpdateRequest.occupation());
+        memberValidator.validateDuplicatedNickname(request.nickname());
+        member.changeProfile(request.nickname(), request.occupation());
     }
 
     @Transactional
-    public void updateSlackInfo(Long id, SlackInfoRequest slackInfoRequest) {
-        Member findMember = memberRepository.findById(id)
+    public void updateSlackInfo(Long id, MemberServiceSlackInfoRequest request) {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        SlackInfo slackInfo = slackInfoRequest.toSlackInfo();
-        findMember.interLockSlack(slackInfo);
+        SlackInfo slackInfo = request.toVO();
+        member.interLockSlack(slackInfo);
     }
 
     @Transactional
     public void deleteMember(Long id) {
-        Member findMember = memberRepository.findById(id)
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        memberRepository.delete(findMember);
-    }
-
-    private void validateDuplicatedMember(Member requestMember) {
-        validateDuplicatedEmail(requestMember.getAccount().getEmail());
-        validateDuplicatedNickname(requestMember.getNickname());
-    }
-
-    private void validateDuplicatedEmail(String email) {
-        memberRepository.findByAccount_Email(email)
-                .ifPresent(member -> {
-                    throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_EMAIL);
-                });
-    }
-
-    private void validateDuplicatedNickname(String nickname) {
-        memberRepository.findByNickname(nickname)
-                .ifPresent(member -> {
-                    throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_NICKNAME);
-                });
+        memberRepository.delete(member);
     }
 }

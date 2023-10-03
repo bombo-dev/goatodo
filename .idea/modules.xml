@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/goatodo.main.iml" filepath="$PROJECT_DIR$/.idea/modules/goatodo.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/api/goatodo.api.main.iml" filepath="$PROJECT_DIR$/.idea/modules/api/goatodo.api.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/application/goatodo.application.main.iml" filepath="$PROJECT_DIR$/.idea/modules/application/goatodo.application.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/goatodo.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/goatodo.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/goatodo.domain.main.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/goatodo.domain.main.iml" />
     </modules>
   </component>
 </project>
