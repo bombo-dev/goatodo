@@ -40,7 +40,7 @@ public class MemberService {
         Member member = memberRepository.findByAccount_Email(request.email())
                 .orElseThrow(() -> new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED));
 
-        Account account = request.toVo();
+        Account account = request.toVO();
         member.validSameMember(account);
 
         return member.getId();

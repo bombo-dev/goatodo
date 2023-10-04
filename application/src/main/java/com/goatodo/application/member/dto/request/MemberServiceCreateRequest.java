@@ -4,9 +4,7 @@ import com.goatodo.domain.member.Member;
 import com.goatodo.domain.member.Occupation;
 import com.goatodo.domain.member.Role;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 @Builder
 public record MemberServiceCreateRequest(
         MemberServiceAccountRequest account,
@@ -18,7 +16,7 @@ public record MemberServiceCreateRequest(
 
     public Member toEntity() {
         return Member.builder()
-                .account(account.toVo())
+                .account(account.toVO())
                 .nickname(nickName)
                 .occupation(occupation)
                 .role(role)
