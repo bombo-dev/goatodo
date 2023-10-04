@@ -1,7 +1,8 @@
 package com.goatodo.domain.todo.exception;
 
-import com.bombo.goatodo.global.error.ErrorCode;
-import com.bombo.goatodo.global.exception.RestApiException;
+
+import com.goatodo.common.error.ErrorCode;
+import com.goatodo.common.exception.RestApiException;
 
 public class NotActiveException extends RestApiException {
 

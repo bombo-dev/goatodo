@@ -1,9 +1,9 @@
 package com.goatodo.domain.todo;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.member.Role;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;

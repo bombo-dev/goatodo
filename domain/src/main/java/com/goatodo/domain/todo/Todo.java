@@ -1,8 +1,14 @@
 package com.goatodo.domain.todo;
 
+import com.goatodo.common.error.ErrorCode;
+import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
 import com.goatodo.domain.member.Member;
+import com.goatodo.domain.todo.exception.NotActiveException;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,20 +26,26 @@ public class Todo extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
+    @NotNull(message = "Todo 작성 시 회원은 필수 입니다.")
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @NotNull(message = "Todo 작성 시 태그는 필수 입니다.")
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
     private Tag tag;
 
+    @NotBlank(message = "Todo 작성 시 제목은 공백이거나 null 이면 안됩니다.")
+    @Size(max = 20, message = "Todo의 제목의 길이는 20자를 초과 할 수 없습니다.")
     @Column(name = "title", length = 20, nullable = false)
     private String title;
 
+    @Size(max = 50, message = "Todo의 설명은 50자를 초과 할 수 없습니다.")
     @Column(name = "description", length = 50)
     private String description;
 
+    @NotNull(message = "Todo 진행 상태는 null 일 수 없습니다.")
     @Enumerated(EnumType.STRING)
     @Column(name = "complete_status", nullable = false)
     private CompleteStatus completeStatus;
@@ -56,16 +68,31 @@ public class Todo extends BaseEntity {
         this.isActive = isActive;
     }
 
+    public static Todo createTodo(Member member, Tag tag, String title, String description) {
+        return Todo.builder()
+                .member(member)
+                .tag(tag)
+                .title(title)
+                .description(description)
+                .completeStatus(CompleteStatus.READY)
+                .isActive(true)
+                .build();
+    }
+
     public Long getMemberId() {
-        return this.member.getId();
+        return member.getId();
     }
 
-    public boolean getActive() {
-        return this.isActive;
+    public void validOwn(Long memberId, ErrorCode errorCode) {
+        if (!memberId.equals(member.getId())) {
+            throw new RoleException(errorCode);
+        }
     }
 
-    public boolean isOwnTodo(Member member) {
-        return this.member.isSameMember(member.getAccount());
+    public void validActive() {
+        if (!isActive) {
+            throw new NotActiveException(ErrorCode.NOT_ACTIVE);
+        }
     }
 
     public void updateTodo(Todo todo) {

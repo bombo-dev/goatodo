@@ -1,8 +1,8 @@
 package com.goatodo.api.todo.presentation;
 
-import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
-import com.bombo.goatodo.domain.todo.service.AdminTagService;
-import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
+import com.goatodo.api.todo.presentation.dto.TagCreateRequest;
+import com.goatodo.application.todo.AdminTagService;
+import com.goatodo.application.todo.dto.TagsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.goatodo.api.todo.presentation.dto;
 
-import com.bombo.goatodo.domain.todo.CompleteStatus;
+import com.goatodo.domain.todo.CompleteStatus;
 import jakarta.validation.constraints.NotNull;
 
 public record TodoCompleteStatusUpdateRequest(

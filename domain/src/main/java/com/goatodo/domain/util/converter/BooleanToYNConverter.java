@@ -1,4 +1,4 @@
-package com.goatodo.common.util;
+package com.goatodo.domain.util.converter;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

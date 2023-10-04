@@ -1,19 +1,22 @@
 package com.goatodo.domain.member.repository;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
+import com.goatodo.domain.config.RepositoryTestConfiguration;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.member.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
+@ContextConfiguration(classes = RepositoryTestConfiguration.class)
 class MemberRepositoryTest {
 
     @Autowired

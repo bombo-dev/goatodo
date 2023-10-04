@@ -27,6 +27,10 @@ public class Account {
         this.password = password;
     }
 
+    public boolean isCorrect(Account account) {
+        return this.equals(account);
+    }
+
     public boolean equalsEmail(String email) {
         return this.email.equals(email);
     }

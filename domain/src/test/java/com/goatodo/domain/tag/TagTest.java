@@ -1,10 +1,10 @@
 package com.goatodo.domain.tag;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.todo.Tag;
-import com.bombo.goatodo.domain.todo.TagType;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.todo.Tag;
+import com.goatodo.domain.todo.TagType;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;

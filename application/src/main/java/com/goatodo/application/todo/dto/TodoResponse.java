@@ -1,7 +1,8 @@
 package com.goatodo.application.todo.dto;
 
-import com.bombo.goatodo.domain.todo.Todo;
-import com.bombo.goatodo.util.FormatConverter;
+
+import com.goatodo.common.util.FormatConverter;
+import com.goatodo.domain.todo.Todo;
 
 public record TodoResponse(
         Long id,

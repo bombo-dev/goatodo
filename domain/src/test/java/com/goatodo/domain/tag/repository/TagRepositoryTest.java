@@ -1,24 +1,26 @@
 package com.goatodo.domain.tag.repository;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
-import com.bombo.goatodo.domain.member.repository.MemberRepository;
-import com.bombo.goatodo.domain.todo.Tag;
-import com.bombo.goatodo.domain.todo.TagType;
-import com.bombo.goatodo.domain.todo.repository.TagRepository;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.member.Role;
+import com.goatodo.domain.member.repository.MemberRepository;
+import com.goatodo.domain.todo.Tag;
+import com.goatodo.domain.todo.TagType;
+import com.goatodo.domain.todo.repository.TagRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
+@ComponentScan(basePackages = {"com.goatodo.domain"})
 class TagRepositoryTest {
 
     @Autowired
@@ -278,7 +280,7 @@ class TagRepositoryTest {
         tagRepository.save(tagD);
 
         // when
-        Optional<Tag> findTag = tagRepository.existSameMemberTag(savedMember.getId(), "수업");
+        Optional<Tag> findTag = tagRepository.findByMember_IdAndName(savedMember.getId(), "수업");
 
         // then
         Assertions.assertThat(findTag).isNotEmpty();
@@ -318,7 +320,7 @@ class TagRepositoryTest {
         tagRepository.save(tagD);
 
         // when
-        Optional<Tag> findTag = tagRepository.existSameMemberTag(savedMember.getId(), "일상");
+        Optional<Tag> findTag = tagRepository.findByMember_IdAndName(savedMember.getId(), "일상");
 
         // then
         Assertions.assertThat(findTag).isNotEmpty();
@@ -337,7 +339,7 @@ class TagRepositoryTest {
 
         // when
         tagRepository.save(tag);
-        Optional<Tag> findtag = tagRepository.existSameMemberTag(savedMember.getId(), tag.getName());
+        Optional<Tag> findtag = tagRepository.findByMember_IdAndName(savedMember.getId(), tag.getName());
 
         // then
         Assertions.assertThat(findtag).isNotEmpty();

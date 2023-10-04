@@ -41,7 +41,7 @@ public class MemberService {
                 .orElseThrow(() -> new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED));
 
         Account account = request.toVO();
-        member.validSameMember(account);
+        member.validLoginInfo(account);
 
         return member.getId();
     }

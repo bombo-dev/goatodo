@@ -1,6 +1,6 @@
 package com.goatodo.api.todo.presentation.dto;
 
-import com.bombo.goatodo.domain.todo.TagType;
+import com.goatodo.domain.todo.TagType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

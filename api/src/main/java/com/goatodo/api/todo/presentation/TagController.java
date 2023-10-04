@@ -1,10 +1,11 @@
 package com.goatodo.api.todo.presentation;
 
-import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
-import com.bombo.goatodo.domain.todo.controller.dto.TagDeleteRequest;
-import com.bombo.goatodo.domain.todo.controller.dto.TagUpdateRequest;
-import com.bombo.goatodo.domain.todo.service.MemberTagService;
-import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
+import com.goatodo.api.todo.presentation.dto.TagCreateRequest;
+import com.goatodo.api.todo.presentation.dto.TagDeleteRequest;
+import com.goatodo.api.todo.presentation.dto.TagUpdateRequest;
+import com.goatodo.api.todo.presentation.interfaces.TagRequestMapper;
+import com.goatodo.application.todo.MemberTagService;
+import com.goatodo.application.todo.dto.TagsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,38 +18,39 @@ import org.springframework.web.bind.annotation.*;
 public class TagController {
 
     private final MemberTagService memberTagService;
+    private final TagRequestMapper tagRequestMapper;
 
-    @PostMapping("/tag")
-    public ResponseEntity<Void> saveTag(@Validated @RequestBody TagCreateRequest tagCreateRequest) {
-        memberTagService.save(tagCreateRequest);
+    @PostMapping("/tags")
+    public ResponseEntity<Void> saveTag(@Validated @RequestBody TagCreateRequest request) {
+        memberTagService.save(tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/tags/{id}")
-    public ResponseEntity<TagsResponse> findTags(@PathVariable Long id) {
-        TagsResponse findTagsResponse = memberTagService.findTagsByMember(id);
+    @GetMapping("/tags/{tagId}")
+    public ResponseEntity<TagsResponse> findTags(@PathVariable Long tagId) {
+        TagsResponse tagsResponse = memberTagService.findTagsByMember(tagId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(findTagsResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(tagsResponse);
     }
 
-    @GetMapping("/tags/{id}/select")
-    public ResponseEntity<TagsResponse> findSelectTags(@PathVariable Long id) {
-        TagsResponse findTagsResponse = memberTagService.findTagsForSelecting(id);
+    @GetMapping("/tags/{tagId}/select")
+    public ResponseEntity<TagsResponse> findSelectTags(@PathVariable Long tagId) {
+        TagsResponse tagsResponse = memberTagService.findTagsForSelecting(tagId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(findTagsResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(tagsResponse);
     }
 
-    @PostMapping("/tag/{id}")
-    public ResponseEntity<Void> updateTag(@PathVariable Long id, @Validated @RequestBody TagUpdateRequest tagUpdateRequest) {
-        memberTagService.updateTag(id, tagUpdateRequest);
+    @PatchMapping("/tags/{tagId}")
+    public ResponseEntity<Void> updateTag(@PathVariable Long tagId, @Validated @RequestBody TagUpdateRequest request) {
+        memberTagService.updateTag(tagId, tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @DeleteMapping("/tag/{id}")
-    public ResponseEntity<Void> deleteTag(@PathVariable Long id, @Validated @RequestBody TagDeleteRequest tagDeleteRequest) {
-        memberTagService.deleteTag(id, tagDeleteRequest);
+    @DeleteMapping("/tags/{tagId}")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long tagId, @Validated @RequestBody TagDeleteRequest request) {
+        memberTagService.deleteTag(tagId, tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

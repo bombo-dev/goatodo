@@ -62,8 +62,8 @@ public class Member extends BaseEntity {
 
     public void changePassword(String email, String password) {
         validSameEmail(email);
-        validSamePassword(password);
-        this.account = new Account(email, password);
+        validDuplicatePassword(password);
+        account = new Account(email, password);
     }
 
     public void changeProfile(String nickname, Occupation occupation) {
@@ -76,19 +76,19 @@ public class Member extends BaseEntity {
     }
 
     public void validSameEmail(String email) {
-        if (!this.account.equalsEmail(email)) {
+        if (!account.equalsEmail(email)) {
             throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         }
     }
 
-    public void validSamePassword(String password) {
-        if (this.account.equalsPassword(password)) {
+    public void validDuplicatePassword(String password) {
+        if (account.equalsPassword(password)) {
             throw new DuplicateException(ErrorCode.MEMBER_DUPLICATE_PASSWORD);
         }
     }
 
-    public void validSameMember(Account account) {
-        if (!this.account.equals(account)) {
+    public void validLoginInfo(Account account) {
+        if (this.account.isCorrect(account)) {
             throw new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED);
         }
     }

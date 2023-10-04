@@ -1,26 +1,28 @@
 package com.goatodo.domain.todo.repository;
 
-import com.bombo.goatodo.domain.member.Account;
-import com.bombo.goatodo.domain.member.Member;
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
-import com.bombo.goatodo.domain.member.repository.MemberRepository;
-import com.bombo.goatodo.domain.todo.CompleteStatus;
-import com.bombo.goatodo.domain.todo.Tag;
-import com.bombo.goatodo.domain.todo.TagType;
-import com.bombo.goatodo.domain.todo.Todo;
+import com.goatodo.domain.member.Account;
+import com.goatodo.domain.member.Member;
+import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.member.Role;
+import com.goatodo.domain.member.repository.MemberRepository;
+import com.goatodo.domain.todo.CompleteStatus;
+import com.goatodo.domain.todo.Tag;
+import com.goatodo.domain.todo.TagType;
+import com.goatodo.domain.todo.Todo;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @DataJpaTest
+@ComponentScan(basePackages = {"com.goatodo.domain"})
 class TodoRepositoryTest {
 
     @Autowired

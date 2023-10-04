@@ -19,7 +19,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
     List<Tag> findSelectingTag(Long memberId);
 
     @Query("SELECT t FROM Tag t LEFT JOIN FETCH t.member m WHERE (m.id IS NULL OR m.id = :memberId) AND t.name = :name")
-    Optional<Tag> existSameMemberTag(Long memberId, String name);
+    Optional<Tag> findByMember_IdAndName(Long memberId, String name);
 
     @Query("SELECT t FROM Tag t WHERE t.member IS NULL AND t.name = :name")
     Optional<Tag> existSameCommonTag(String name);
