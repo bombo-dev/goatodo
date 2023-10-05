@@ -1,8 +1,8 @@
 package com.goatodo.domain.tag;
 
-import com.goatodo.domain.member.Account;
-import com.goatodo.domain.member.Member;
-import com.goatodo.domain.member.Occupation;
+import com.goatodo.domain.user.Account;
+import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.Occupation;
 import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.TagType;
 import jakarta.validation.ConstraintViolation;
@@ -21,7 +21,7 @@ import java.util.Set;
 class TagTest {
 
     private static LocalValidatorFactoryBean validator;
-    private Member member;
+    private User user;
 
     @BeforeAll
     static void beforeAll() {
@@ -37,7 +37,7 @@ class TagTest {
                 .password("password1234")
                 .build();
 
-        member = Member.builder()
+        user = User.builder()
                 .account(account)
                 .nickname("닉네임")
                 .occupation(Occupation.GENERAL)
@@ -66,7 +66,7 @@ class TagTest {
         // given
         Tag tag = Tag.builder()
                 .name("20자가 초과하는 태그를 한 번 만들어보았습니다.")
-                .member(member)
+                .member(user)
                 .tagType(TagType.INDIVIDUAL)
                 .build();
 
@@ -83,7 +83,7 @@ class TagTest {
         // given
         Tag tag = Tag.builder()
                 .name("   ")
-                .member(member)
+                .member(user)
                 .tagType(TagType.INDIVIDUAL)
                 .build();
 
@@ -100,7 +100,7 @@ class TagTest {
         // given
         Tag tag = Tag.builder()
                 .name("태그")
-                .member(member)
+                .member(user)
                 .build();
 
         // when
@@ -117,7 +117,7 @@ class TagTest {
         // given
         Tag category = Tag.builder()
                 .name(tag)
-                .member(member)
+                .member(user)
                 .tagType(TagType.INDIVIDUAL)
                 .build();
 

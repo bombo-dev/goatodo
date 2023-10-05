@@ -24,7 +24,7 @@ public record TodoResponse(
                 todo.getCompleteStatus().getStatusName(),
                 FormatConverter.convertLocalDateTimeToString(todo.getCreatedAt()),
                 FormatConverter.convertLocalDateTimeToString(todo.getUpdatedAt()),
-                todo.getActive()
+                todo.getIsActive()
         );
     }
 }

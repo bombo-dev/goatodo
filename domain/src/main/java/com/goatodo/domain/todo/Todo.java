@@ -3,8 +3,8 @@ package com.goatodo.domain.todo;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
-import com.goatodo.domain.member.Member;
 import com.goatodo.domain.todo.exception.NotActiveException;
+import com.goatodo.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,7 +29,7 @@ public class Todo extends BaseEntity {
     @NotNull(message = "Todo 작성 시 회원은 필수 입니다.")
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    private User user;
 
     @NotNull(message = "Todo 작성 시 태그는 필수 입니다.")
     @ManyToOne
@@ -54,13 +54,13 @@ public class Todo extends BaseEntity {
     private boolean isActive;
 
     @Builder
-    public Todo(Member member,
+    public Todo(User user,
                 Tag tag,
                 String title,
                 CompleteStatus completeStatus,
                 String description,
                 boolean isActive) {
-        this.member = member;
+        this.user = user;
         this.tag = tag;
         this.title = title;
         this.description = description;
@@ -68,9 +68,9 @@ public class Todo extends BaseEntity {
         this.isActive = isActive;
     }
 
-    public static Todo createTodo(Member member, Tag tag, String title, String description) {
+    public static Todo createTodo(User user, Tag tag, String title, String description) {
         return Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title(title)
                 .description(description)
@@ -80,11 +80,15 @@ public class Todo extends BaseEntity {
     }
 
     public Long getMemberId() {
-        return member.getId();
+        return user.getId();
+    }
+
+    public boolean getIsActive() {
+        return isActive;
     }
 
     public void validOwn(Long memberId, ErrorCode errorCode) {
-        if (!memberId.equals(member.getId())) {
+        if (!memberId.equals(user.getId())) {
             throw new RoleException(errorCode);
         }
     }

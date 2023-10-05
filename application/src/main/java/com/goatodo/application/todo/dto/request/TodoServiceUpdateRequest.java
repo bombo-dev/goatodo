@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record TodoServiceUpdateRequest(
-        Long memberId,
+        Long userId,
         Long tagId,
         String title,
         String description

@@ -1,6 +1,6 @@
 package com.goatodo.domain.statistics;
 
-import com.goatodo.domain.member.Member;
+import com.goatodo.domain.user.User;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,5 +13,5 @@ public class DailyStatistics extends StatisticsEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 }

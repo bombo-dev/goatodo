@@ -4,11 +4,11 @@ import lombok.Builder;
 
 @Builder
 public record TodoServiceCreateRequest(
-        Long memberId,
+        Long userId,
         Long tagId,
         String title,
         String description
 ) {
 
-    
+
 }

@@ -3,7 +3,7 @@ package com.goatodo.domain.todo;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
-import com.goatodo.domain.member.Member;
+import com.goatodo.domain.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -32,7 +32,7 @@ public class Tag extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member;
+    private User user;
 
     @NotBlank(message = "카테고리는 공백 일 수 없습니다.")
     @Size(max = 20, message = "카테고리는 20자 이내여야 합니다.")
@@ -45,15 +45,15 @@ public class Tag extends BaseEntity {
     private TagType tagType;
 
     @Builder
-    public Tag(Member member, String name, TagType tagType) {
-        this.member = member;
+    public Tag(User user, String name, TagType tagType) {
+        this.user = user;
         this.name = name;
         this.tagType = tagType;
     }
 
-    public static Tag createTag(Member member, String name, TagType tagType) {
+    public static Tag createTag(User user, String name, TagType tagType) {
         return Tag.builder()
-                .member(member)
+                .member(user)
                 .name(name)
                 .tagType(tagType)
                 .build();
@@ -61,13 +61,13 @@ public class Tag extends BaseEntity {
 
 
     public void validOwn(Long memberId, ErrorCode errorCode) {
-        if (memberId.equals(member.getId())) {
+        if (memberId.equals(user.getId())) {
             throw new RoleException(errorCode);
         }
     }
 
     public void validRole(ErrorCode errorCode) {
-        if (member != null && member.isNormal() && tagType.isCommonType()) {
+        if (user != null && user.isNormal() && tagType.isCommonType()) {
             throw new RoleException(errorCode);
         }
     }
@@ -77,8 +77,8 @@ public class Tag extends BaseEntity {
     }
 
     public Long getMemberId() {
-        if (member != null) {
-            return member.getId();
+        if (user != null) {
+            return user.getId();
         }
 
         return null;

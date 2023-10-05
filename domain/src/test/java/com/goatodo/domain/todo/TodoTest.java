@@ -1,9 +1,9 @@
 package com.goatodo.domain.todo;
 
-import com.goatodo.domain.member.Account;
-import com.goatodo.domain.member.Member;
-import com.goatodo.domain.member.Occupation;
-import com.goatodo.domain.member.Role;
+import com.goatodo.domain.user.Account;
+import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.Role;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
@@ -19,7 +19,7 @@ import java.util.Set;
 class TodoTest {
 
     private static LocalValidatorFactoryBean validator;
-    private static Member member;
+    private static User user;
     private static Tag tag;
 
     @BeforeAll
@@ -28,7 +28,7 @@ class TodoTest {
         validator.setProviderClass(HibernateValidator.class);
         validator.afterPropertiesSet();
 
-        member = initMember();
+        user = initMember();
         tag = initTag();
     }
 
@@ -60,7 +60,7 @@ class TodoTest {
     void createTodoNonTag() {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
                 .completeStatus(CompleteStatus.READY)
@@ -83,7 +83,7 @@ class TodoTest {
     void createTodoNonBlankTitle(String inputTitle) {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title(inputTitle)
                 .description("프로그래머스 문제 풀이")
@@ -111,7 +111,7 @@ class TodoTest {
                 .build();
 
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title("20자가 넘는 제목의 길이를 작성해봤습니다.")
                 .description("프로그래머스 문제 풀이")
@@ -134,7 +134,7 @@ class TodoTest {
     void TodoOutOfRangeDescription() {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title("코딩 테스트 연습")
                 .description("프로그래머스의 문제를 풀 계획입니다. 프로그래머스 문제 중에서도 DP 관련된 문제를 풀 계획임.")
@@ -157,7 +157,7 @@ class TodoTest {
     void TodoDescriptionCanBlank() {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title("코딩 테스트 연습")
                 .description("")
@@ -177,7 +177,7 @@ class TodoTest {
     void todoCompleteStatusIsNotNull() {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title("코딩 테스트 연습")
                 .description("프로그래머스 문제 풀이")
@@ -199,7 +199,7 @@ class TodoTest {
     void createTodoTest() {
         // given
         Todo todo = Todo.builder()
-                .member(member)
+                .member(user)
                 .tag(tag)
                 .title("코딩 테스트 연습")
                 .description("프로그래머스 문제 풀이")
@@ -214,13 +214,13 @@ class TodoTest {
         Assertions.assertThat(constraintViolations).isEmpty();
     }
 
-    static Member initMember() {
+    static User initMember() {
         Account account = Account.builder()
                 .email("goatodo@naver.com")
                 .password("password1234!")
                 .build();
 
-        return Member.builder()
+        return User.builder()
                 .account(account)
                 .occupation(Occupation.GENERAL)
                 .nickname("고투두")

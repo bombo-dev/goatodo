@@ -4,7 +4,7 @@ import com.goatodo.api.todo.presentation.dto.TagCreateRequest;
 import com.goatodo.api.todo.presentation.dto.TagDeleteRequest;
 import com.goatodo.api.todo.presentation.dto.TagUpdateRequest;
 import com.goatodo.api.todo.presentation.interfaces.TagRequestMapper;
-import com.goatodo.application.todo.MemberTagService;
+import com.goatodo.application.todo.UserTagService;
 import com.goatodo.application.todo.dto.TagsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,40 +17,40 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class TagController {
 
-    private final MemberTagService memberTagService;
+    private final UserTagService userTagService;
     private final TagRequestMapper tagRequestMapper;
 
     @PostMapping("/tags")
     public ResponseEntity<Void> saveTag(@Validated @RequestBody TagCreateRequest request) {
-        memberTagService.save(tagRequestMapper.toService(request));
+        userTagService.save(tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/tags/{tagId}")
     public ResponseEntity<TagsResponse> findTags(@PathVariable Long tagId) {
-        TagsResponse tagsResponse = memberTagService.findTagsByMember(tagId);
+        TagsResponse tagsResponse = userTagService.findTagsByMember(tagId);
 
         return ResponseEntity.status(HttpStatus.OK).body(tagsResponse);
     }
 
     @GetMapping("/tags/{tagId}/select")
     public ResponseEntity<TagsResponse> findSelectTags(@PathVariable Long tagId) {
-        TagsResponse tagsResponse = memberTagService.findTagsForSelecting(tagId);
+        TagsResponse tagsResponse = userTagService.findTagsForSelecting(tagId);
 
         return ResponseEntity.status(HttpStatus.OK).body(tagsResponse);
     }
 
     @PatchMapping("/tags/{tagId}")
     public ResponseEntity<Void> updateTag(@PathVariable Long tagId, @Validated @RequestBody TagUpdateRequest request) {
-        memberTagService.updateTag(tagId, tagRequestMapper.toService(request));
+        userTagService.updateTag(tagId, tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/tags/{tagId}")
     public ResponseEntity<Void> deleteTag(@PathVariable Long tagId, @Validated @RequestBody TagDeleteRequest request) {
-        memberTagService.deleteTag(tagId, tagRequestMapper.toService(request));
+        userTagService.deleteTag(tagId, tagRequestMapper.toService(request));
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

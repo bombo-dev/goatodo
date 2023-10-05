@@ -2,9 +2,9 @@ package com.goatodo.application.slack;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goatodo.domain.member.Member;
-import com.goatodo.domain.member.repository.MemberRepository;
 import com.goatodo.domain.todo.repository.TodoRepository;
+import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -28,24 +28,24 @@ public class SlackService {
     @Value("${slackBotToken}")
     private String slackToken;
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final TodoRepository todoRepository;
 
-    public SlackService(MemberRepository memberRepository, TodoRepository todoRepository) {
-        this.memberRepository = memberRepository;
+    public SlackService(UserRepository userRepository, TodoRepository todoRepository) {
+        this.userRepository = userRepository;
         this.todoRepository = todoRepository;
     }
 
     public void sendStartMessageToUser(Long memberId) {
 
-        Member findMember = memberRepository.findById(memberId)
+        User findUser = userRepository.findById(memberId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         String url = SLACK_POST_MESSAGE_URL;
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + slackToken);
         headers.add("Content-type", "application/json; charset=utf-8");
-        String authenticationSlackId = getSlackIdByEmail(findMember.getSlackInfo().getSlackEmail());
+        String authenticationSlackId = getSlackIdByEmail(findUser.getSlackInfo().getSlackEmail());
         String lifeQuotes = LifeQuotesStorage.randomOf();
         String responseMsg = createResponseMsg(lifeQuotes);
         SlackDailyResponse slackDailyResponse = new SlackDailyResponse(authenticationSlackId, responseMsg);
@@ -73,7 +73,7 @@ public class SlackService {
     }
 
     public void sendEndDailyMessageToUser(Long memberId) {
-        Member findMember = memberRepository.findById(memberId)
+        User findUser = userRepository.findById(memberId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         String url = SLACK_POST_MESSAGE_URL;
@@ -81,7 +81,7 @@ public class SlackService {
         headers.add("Authorization", "Bearer " + slackToken);
         headers.add("Content-type", "application/json; charset=utf-8");
 
-        String authenticationSlackId = getSlackIdByEmail(findMember.getSlackInfo().getSlackEmail());
+        String authenticationSlackId = getSlackIdByEmail(findUser.getSlackInfo().getSlackEmail());
         double dailyTodoAchievementRate = getDailyTodoAchievementRate(memberId);
         String dailyMessage = createDailyEndMessage(dailyTodoAchievementRate);
         SlackDailyResponse slackDailyResponse = new SlackDailyResponse(authenticationSlackId, dailyMessage);

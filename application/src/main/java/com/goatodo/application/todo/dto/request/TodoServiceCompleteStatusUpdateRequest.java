@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record TodoServiceCompleteStatusUpdateRequest(
-        Long memberId,
+        Long userId,
         CompleteStatus completeStatus
 ) {
 }

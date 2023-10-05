@@ -1,14 +1,14 @@
 package com.goatodo.domain.todo.repository;
 
-import com.goatodo.domain.member.Account;
-import com.goatodo.domain.member.Member;
-import com.goatodo.domain.member.Occupation;
-import com.goatodo.domain.member.Role;
-import com.goatodo.domain.member.repository.MemberRepository;
 import com.goatodo.domain.todo.CompleteStatus;
 import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.TagType;
 import com.goatodo.domain.todo.Todo;
+import com.goatodo.domain.user.Account;
+import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.Role;
+import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -29,17 +29,17 @@ class TodoRepositoryTest {
     TodoRepository todoRepository;
 
     @Autowired
-    MemberRepository memberRepository;
+    UserRepository userRepository;
 
     @Autowired
     TagRepository tagRepository;
 
-    private static Member member;
+    private static User user;
     private static Tag tag;
 
     @BeforeAll
     static void beforeAll() {
-        member = initMember();
+        user = initMember();
         tag = initTag();
     }
 
@@ -47,11 +47,11 @@ class TodoRepositoryTest {
     @DisplayName("Todo 를 정상적으로 생성 할 수 있다.")
     void saveTodoTest() {
         // given
-        Member savedMember = memberRepository.save(member);
+        User savedUser = userRepository.save(user);
         Tag savedTag = tagRepository.save(tag);
 
         Todo todo = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
@@ -66,18 +66,18 @@ class TodoRepositoryTest {
         // then
         Assertions.assertThat(findTodo).isNotEmpty();
         Assertions.assertThat(findTodo.get().getTag().getName()).isEqualTo("공부");
-        Assertions.assertThat(findTodo.get().getMember().getNickname()).isEqualTo("고투두");
+        Assertions.assertThat(findTodo.get().getUser().getNickname()).isEqualTo("고투두");
     }
 
     @Test
     @DisplayName("Todo를 정상적으로 단 건 조회 할 수 있다.")
     void findTodoTest() {
         // given
-        Member savedMember = memberRepository.save(member);
+        User savedUser = userRepository.save(user);
         Tag savedTag = tagRepository.save(tag);
 
         Todo todo = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
@@ -92,7 +92,7 @@ class TodoRepositoryTest {
         // then
         Assertions.assertThat(findTodo).isNotEmpty();
         Assertions.assertThat(findTodo.get().getTag().getName()).isEqualTo("공부");
-        Assertions.assertThat(findTodo.get().getMember().getNickname()).isEqualTo("고투두");
+        Assertions.assertThat(findTodo.get().getUser().getNickname()).isEqualTo("고투두");
     }
 
     @Test
@@ -104,7 +104,7 @@ class TodoRepositoryTest {
                 .password("password1234!")
                 .build();
 
-        Member adminMember = Member.builder()
+        User adminUser = User.builder()
                 .account(account)
                 .nickname("운영자")
                 .occupation(Occupation.EMPLOYEE)
@@ -112,18 +112,18 @@ class TodoRepositoryTest {
                 .build();
 
         Tag commonTag = Tag.builder()
-                .member(adminMember)
+                .member(adminUser)
                 .tagType(TagType.COMMON)
                 .name("스터디")
                 .build();
 
-        Member savedMemberA = memberRepository.save(member);
-        Member savedMemberB = memberRepository.save(adminMember);
+        User savedUserA = userRepository.save(user);
+        User savedUserB = userRepository.save(adminUser);
         Tag savedTagA = tagRepository.save(tag);
         Tag savedTagB = tagRepository.save(commonTag);
 
         Todo todoA = Todo.builder()
-                .member(savedMemberA)
+                .member(savedUserA)
                 .tag(savedTagA)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
@@ -132,7 +132,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoB = Todo.builder()
-                .member(savedMemberB)
+                .member(savedUserB)
                 .tag(savedTagB)
                 .title("디자인 패턴 스터디")
                 .description("chapter 10, chapter 11")
@@ -159,7 +159,7 @@ class TodoRepositoryTest {
                 .password("password1234!")
                 .build();
 
-        Member adminMember = Member.builder()
+        User adminUser = User.builder()
                 .account(account)
                 .nickname("운영자")
                 .occupation(Occupation.EMPLOYEE)
@@ -167,18 +167,18 @@ class TodoRepositoryTest {
                 .build();
 
         Tag commonTag = Tag.builder()
-                .member(adminMember)
+                .member(adminUser)
                 .tagType(TagType.COMMON)
                 .name("스터디")
                 .build();
 
-        Member savedMemberA = memberRepository.save(member);
-        Member savedMemberB = memberRepository.save(adminMember);
+        User savedUserA = userRepository.save(user);
+        User savedUserB = userRepository.save(adminUser);
         Tag savedTagA = tagRepository.save(tag);
         Tag savedTagB = tagRepository.save(commonTag);
 
         Todo todoA = Todo.builder()
-                .member(savedMemberA)
+                .member(savedUserA)
                 .tag(savedTagA)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
@@ -187,7 +187,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoB = Todo.builder()
-                .member(savedMemberB)
+                .member(savedUserB)
                 .tag(savedTagB)
                 .title("디자인 패턴 스터디")
                 .description("chapter 10, chapter 11")
@@ -198,7 +198,7 @@ class TodoRepositoryTest {
         // when
         todoRepository.save(todoA);
         todoRepository.save(todoB);
-        List<Todo> findTodos = todoRepository.findAllByMember_Id(savedMemberA.getId());
+        List<Todo> findTodos = todoRepository.findAllByMember_Id(savedUserA.getId());
 
         // then
         Assertions.assertThat(findTodos).isNotEmpty();
@@ -209,14 +209,14 @@ class TodoRepositoryTest {
     @DisplayName("당일 생성한 Todo만을 조회 할 수 있다.")
     void findTodoDateIsToday() {
         // given
-        Member savedMember = memberRepository.save(member);
+        User savedUser = userRepository.save(user);
         Tag savedTag = tagRepository.save(tag);
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
         LocalDateTime startToday = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
         LocalDateTime endToday = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59);
 
         Todo todoA = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("하루의 시작 약속")
                 .completeStatus(CompleteStatus.READY)
@@ -224,7 +224,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoB = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("하루가 끝나기 바로 전 약속")
                 .completeStatus(CompleteStatus.READY)
@@ -232,7 +232,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoC = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("어제 약속")
                 .completeStatus(CompleteStatus.COMPLETE)
@@ -251,7 +251,7 @@ class TodoRepositoryTest {
         todoRepository.save(savedTodoC);
 
         // when
-        List<Todo> findTodayTodoList = todoRepository.findAllByMember_idAndDateBetween(savedMember.getId(), startToday, endToday);
+        List<Todo> findTodayTodoList = todoRepository.findAllByMember_idAndDateBetween(savedUser.getId(), startToday, endToday);
 
         // then
         Assertions.assertThat(findTodayTodoList).hasSize(2);
@@ -262,7 +262,7 @@ class TodoRepositoryTest {
     @DisplayName("어제 생성한 Todo만을 조회 할 수 있다.")
     void findTodoDateIsYesterday() {
         // given
-        Member savedMember = memberRepository.save(member);
+        User savedUser = userRepository.save(user);
         Tag savedTag = tagRepository.save(tag);
         LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
         LocalDateTime startToday = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0);
@@ -272,7 +272,7 @@ class TodoRepositoryTest {
         LocalDateTime endYesterday = yesterday.withHour(23).withMinute(59).withSecond(59);
 
         Todo todoA = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("하루의 시작 약속")
                 .completeStatus(CompleteStatus.READY)
@@ -280,7 +280,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoB = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("하루가 끝나기 바로 전 약속")
                 .completeStatus(CompleteStatus.READY)
@@ -288,7 +288,7 @@ class TodoRepositoryTest {
                 .build();
 
         Todo todoC = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("어제 약속")
                 .completeStatus(CompleteStatus.COMPLETE)
@@ -307,7 +307,7 @@ class TodoRepositoryTest {
         todoRepository.save(savedTodoC);
 
         // when
-        List<Todo> findYesterDayTodoList = todoRepository.findAllByMember_idAndDateBetween(savedMember.getId(), startYesterday, endYesterday);
+        List<Todo> findYesterDayTodoList = todoRepository.findAllByMember_idAndDateBetween(savedUser.getId(), startYesterday, endYesterday);
 
         // then
         Assertions.assertThat(findYesterDayTodoList).hasSize(1);
@@ -318,11 +318,11 @@ class TodoRepositoryTest {
     @DisplayName("Todo를 정상적으로 삭제 할 수 있다.")
     void deleteTodoTest() {
         // given
-        Member savedMember = memberRepository.save(member);
+        User savedUser = userRepository.save(user);
         Tag savedTag = tagRepository.save(tag);
 
         Todo todo = Todo.builder()
-                .member(savedMember)
+                .member(savedUser)
                 .tag(savedTag)
                 .title("코딩 테스트")
                 .description("프로그래머스 문제 풀이")
@@ -339,13 +339,13 @@ class TodoRepositoryTest {
         Assertions.assertThat(findTodoList).isEmpty();
     }
 
-    static Member initMember() {
+    static User initMember() {
         Account account = Account.builder()
                 .email("goatodo@naver.com")
                 .password("password1234!")
                 .build();
 
-        return Member.builder()
+        return User.builder()
                 .account(account)
                 .occupation(Occupation.GENERAL)
                 .nickname("고투두")

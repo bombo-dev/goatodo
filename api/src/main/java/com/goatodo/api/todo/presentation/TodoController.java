@@ -1,8 +1,9 @@
 package com.goatodo.api.todo.presentation;
 
-import com.bombo.goatodo.domain.todo.service.TodoService;
-import com.bombo.goatodo.domain.todo.service.dto.TodoResponse;
-import com.bombo.goatodo.domain.todo.service.dto.TodosResponse;
+import com.goatodo.api.todo.presentation.dto.*;
+import com.goatodo.application.todo.TodoService;
+import com.goatodo.application.todo.dto.TodoResponse;
+import com.goatodo.application.todo.dto.TodosResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class TodoController {
     public ResponseEntity<Void> modifyTodo(
             @PathVariable Long id,
             @Validated @RequestBody TodoUpdateRequest todoUpdateRequest) {
-        todoService.changeTodo(todoUpdateRequest);
+        todoService.updateTodo(todoUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

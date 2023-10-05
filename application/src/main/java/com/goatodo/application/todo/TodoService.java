@@ -5,12 +5,12 @@ import com.goatodo.application.todo.dto.TodosResponse;
 import com.goatodo.application.todo.dto.request.*;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.NotExistIdRequestException;
-import com.goatodo.domain.member.Member;
-import com.goatodo.domain.member.repository.MemberRepository;
 import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.Todo;
 import com.goatodo.domain.todo.repository.TagRepository;
 import com.goatodo.domain.todo.repository.TodoRepository;
+import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +23,18 @@ import java.util.List;
 public class TodoService {
 
     private final TodoRepository todoRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final TagRepository tagRepository;
 
     @Transactional
     public Long postTodo(TodoServiceCreateRequest request) {
-        Member member = memberRepository.findById(request.memberId())
+        User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         Tag tag = tagRepository.findById(request.tagId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        Todo todo = Todo.createTodo(member, tag, request.title(), request.description());
+        Todo todo = Todo.createTodo(user, tag, request.title(), request.description());
         Todo savedTodo = todoRepository.save(todo);
         return savedTodo.getId();
     }
@@ -60,7 +60,7 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         todo.validActive();
-        todo.validOwn(request.memberId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
+        todo.validOwn(request.userId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
         todo.changeCompleteStatus(request.completeStatus());
     }
@@ -68,7 +68,7 @@ public class TodoService {
     @Transactional
     public void updateTodo(Long todoId, TodoServiceUpdateRequest request) {
 
-        Member member = memberRepository.findById(request.memberId())
+        User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         Todo todo = todoRepository.findById(todoId)
@@ -77,11 +77,11 @@ public class TodoService {
         Tag tag = tagRepository.findById(request.tagId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        tag.validOwn(member.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
-        todo.validOwn(member.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
+        tag.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
+        todo.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         todo.validActive();
 
-        Todo updateTodo = Todo.createTodo(member, tag, request.title(), request.description());
+        Todo updateTodo = Todo.createTodo(user, tag, request.title(), request.description());
 
         todo.updateTodo(updateTodo);
     }
@@ -91,7 +91,7 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        todo.validOwn(request.memberId(), ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
+        todo.validOwn(request.userId(), ErrorCode.DELETE_REQUEST_IS_FORBIDDEN);
         todo.validActive();
 
         todoRepository.delete(todo);

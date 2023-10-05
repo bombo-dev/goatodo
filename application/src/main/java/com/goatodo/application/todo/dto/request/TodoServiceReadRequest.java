@@ -4,6 +4,6 @@ import lombok.Builder;
 
 @Builder
 public record TodoServiceReadRequest(
-        Long memberId
+        Long userId
 ) {
 }
