@@ -2,7 +2,7 @@ package com.goatodo.domain.user.repository;
 
 import com.goatodo.domain.config.RepositoryTestConfiguration;
 import com.goatodo.domain.user.Account;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
 import com.goatodo.domain.user.User;
 import org.assertj.core.api.Assertions;
@@ -34,7 +34,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .account(account)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -58,7 +58,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .account(account)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -89,14 +89,14 @@ class UserRepositoryTest {
         User userA = User.builder()
                 .account(accountA)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
         User userB = User.builder()
                 .account(accountB)
                 .nickname("고투두2")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -122,7 +122,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .account(account)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -148,7 +148,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .account(account)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -173,7 +173,7 @@ class UserRepositoryTest {
         User user = User.builder()
                 .account(account)
                 .nickname("고투두")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 

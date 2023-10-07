@@ -23,13 +23,13 @@ public class UserEqualsTest {
         User userA = User.builder()
                 .account(accountA)
                 .nickname("회원A")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         User userB = User.builder()
                 .account(accountB)
                 .nickname("회원B")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         // when
@@ -56,13 +56,13 @@ public class UserEqualsTest {
         User userA = User.builder()
                 .account(accountA)
                 .nickname("회원A")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         User userB = User.builder()
                 .account(accountB)
                 .nickname("회원B")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         // when
@@ -89,13 +89,13 @@ public class UserEqualsTest {
         User userA = User.builder()
                 .account(accountA)
                 .nickname("회원A")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         User userB = User.builder()
                 .account(accountB)
                 .nickname("회원A")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         // when

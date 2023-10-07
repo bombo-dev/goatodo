@@ -28,7 +28,7 @@ public class UserRequestMapper {
     public UserServiceUpdateRequest toService(UserUpdateRequest request) {
         return UserServiceUpdateRequest.builder()
                 .nickname(request.nickname())
-                .occupation(request.occupation())
+                .occupation(request.occupationType())
                 .build();
     }
 
@@ -36,7 +36,7 @@ public class UserRequestMapper {
         return UserServiceCreateRequest.builder()
                 .account(toService(request.account()))
                 .password(request.password())
-                .occupation(request.occupation())
+                .occupation(request.occupationType())
                 .role(request.role())
                 .build();
     }

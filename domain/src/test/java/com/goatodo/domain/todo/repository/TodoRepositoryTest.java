@@ -5,7 +5,7 @@ import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.TagType;
 import com.goatodo.domain.todo.Todo;
 import com.goatodo.domain.user.Account;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
 import com.goatodo.domain.user.User;
 import com.goatodo.domain.user.repository.UserRepository;
@@ -107,7 +107,7 @@ class TodoRepositoryTest {
         User adminUser = User.builder()
                 .account(account)
                 .nickname("운영자")
-                .occupation(Occupation.EMPLOYEE)
+                .occupation(OccupationType.EMPLOYEE)
                 .role(Role.ADMIN)
                 .build();
 
@@ -162,7 +162,7 @@ class TodoRepositoryTest {
         User adminUser = User.builder()
                 .account(account)
                 .nickname("운영자")
-                .occupation(Occupation.EMPLOYEE)
+                .occupation(OccupationType.EMPLOYEE)
                 .role(Role.ADMIN)
                 .build();
 
@@ -347,7 +347,7 @@ class TodoRepositoryTest {
 
         return User.builder()
                 .account(account)
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .nickname("고투두")
                 .role(Role.ADMIN)
                 .build();

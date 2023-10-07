@@ -57,7 +57,7 @@ public class AdminTagService {
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         tag.validRole(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
-        tag.changeTag(request.name());
+        tag.changeName(request.name());
     }
 
     @Transactional

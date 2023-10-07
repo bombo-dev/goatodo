@@ -1,22 +1,7 @@
 package com.goatodo.application.tag;
 
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
-import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
-import com.bombo.goatodo.domain.member.service.MemberService;
-import com.bombo.goatodo.domain.todo.Tag;
-import com.bombo.goatodo.domain.todo.TagType;
-import com.bombo.goatodo.domain.todo.controller.dto.TagCreateRequest;
-import com.bombo.goatodo.domain.todo.controller.dto.TagDeleteRequest;
-import com.bombo.goatodo.domain.todo.controller.dto.TagUpdateRequest;
-import com.bombo.goatodo.domain.todo.repository.TagRepository;
-import com.bombo.goatodo.domain.todo.service.AdminTagService;
-import com.bombo.goatodo.domain.todo.service.MemberTagService;
-import com.bombo.goatodo.domain.todo.service.dto.TagResponse;
-import com.bombo.goatodo.domain.todo.service.dto.TagsResponse;
-import com.bombo.goatodo.global.exception.DuplicateException;
-import com.bombo.goatodo.global.exception.NotExistIdRequestException;
-import com.bombo.goatodo.global.exception.RoleException;
+import com.goatodo.domain.user.OccupationType;
+import com.goatodo.domain.user.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +39,7 @@ class UserTagServiceTest {
                 "naver.com",
                 "password1234",
                 "닉네임",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -63,7 +48,7 @@ class UserTagServiceTest {
                 "naver.com",
                 "password1234",
                 "운영자",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.ADMIN
         );
     }

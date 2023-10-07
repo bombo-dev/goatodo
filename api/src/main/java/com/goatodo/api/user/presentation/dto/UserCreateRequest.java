@@ -1,7 +1,7 @@
 package com.goatodo.api.user.presentation.dto;
 
 import com.goatodo.common.util.RegexPattern;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -22,7 +22,7 @@ public record UserCreateRequest(
         String nickname,
 
         @NotNull(message = "회원의 직업은 null 일 수 없습니다.")
-        Occupation occupation,
+        OccupationType occupationType,
 
         Role role
 ) {

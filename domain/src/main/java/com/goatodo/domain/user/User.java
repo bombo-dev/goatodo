@@ -46,7 +46,7 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "occupation", nullable = false)
-    private Occupation occupation;
+    private OccupationType occupationType;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -55,15 +55,15 @@ public class User extends BaseEntity {
     @Builder
     public User(@NotNull Account account,
                 @NotBlank String nickname,
-                @NotNull Occupation occupation,
+                @NotNull OccupationType occupationType,
                 @NotNull Role role) {
         requireNonNull(account);
         requireNonNull(nickname);
-        requireNonNull(occupation);
+        requireNonNull(occupationType);
         requireNonNull(role);
         this.account = account;
         this.nickname = nickname;
-        this.occupation = occupation;
+        this.occupationType = occupationType;
         this.role = role;
         this.experience = 0;
     }
@@ -74,9 +74,9 @@ public class User extends BaseEntity {
         account = new Account(email, password);
     }
 
-    public void changeProfile(String nickname, Occupation occupation) {
+    public void changeProfile(String nickname, OccupationType occupationType) {
         this.nickname = nickname;
-        this.occupation = occupation;
+        this.occupationType = occupationType;
     }
 
     public void interLockSlack(SlackInfo slackInfo) {

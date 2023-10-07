@@ -1,6 +1,6 @@
 package com.goatodo.application.user.dto.request;
 
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
 import com.goatodo.domain.user.User;
 import lombok.Builder;
@@ -10,7 +10,7 @@ public record UserServiceCreateRequest(
         UserServiceAccountRequest account,
         String password,
         String nickName,
-        Occupation occupation,
+        OccupationType occupationType,
         Role role
 ) {
 
@@ -18,7 +18,7 @@ public record UserServiceCreateRequest(
         return User.builder()
                 .account(account.toVO())
                 .nickname(nickName)
-                .occupation(occupation)
+                .occupation(occupationType)
                 .role(role)
                 .build();
     }

@@ -77,7 +77,7 @@ public class UserService {
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
         userValidator.validateDuplicatedNickname(request.nickname());
-        user.changeProfile(request.nickname(), request.occupation());
+        user.changeProfile(request.nickname(), request.occupationType());
     }
 
     @Transactional

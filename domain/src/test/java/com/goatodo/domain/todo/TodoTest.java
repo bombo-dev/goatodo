@@ -1,9 +1,9 @@
 package com.goatodo.domain.todo;
 
 import com.goatodo.domain.user.Account;
-import com.goatodo.domain.user.User;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
+import com.goatodo.domain.user.User;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
@@ -222,7 +222,7 @@ class TodoTest {
 
         return User.builder()
                 .account(account)
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .nickname("고투두")
                 .role(Role.ADMIN)
                 .build();

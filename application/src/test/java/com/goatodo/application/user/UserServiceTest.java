@@ -1,15 +1,7 @@
 package com.goatodo.application.user;
 
-import com.bombo.goatodo.domain.member.Occupation;
-import com.bombo.goatodo.domain.member.Role;
-import com.bombo.goatodo.domain.member.controller.dto.MemberAccountRequest;
-import com.bombo.goatodo.domain.member.controller.dto.MemberCreateRequest;
-import com.bombo.goatodo.domain.member.controller.dto.MemberUpdateRequest;
-import com.bombo.goatodo.domain.member.service.dto.MemberResponse;
-import com.bombo.goatodo.domain.member.service.dto.MembersResponse;
-import com.bombo.goatodo.global.exception.DuplicateException;
-import com.bombo.goatodo.global.exception.NotExistIdRequestException;
-import com.bombo.goatodo.global.exception.RoleException;
+import com.goatodo.domain.user.OccupationType;
+import com.goatodo.domain.user.Role;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +26,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -43,7 +35,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234!",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         userService.save(memberCreateRequestA);
@@ -65,7 +57,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -74,7 +66,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234!",
                 "고투두2",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         userService.save(memberCreateRequestA);
@@ -96,7 +88,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -117,7 +109,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -139,7 +131,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -162,7 +154,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -195,7 +187,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -204,7 +196,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두2",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -228,7 +220,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
 
@@ -237,7 +229,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두2",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         userService.save(memberCreateRequestA);
@@ -245,7 +237,7 @@ class UserServiceTest {
 
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
                 "고투두",
-                Occupation.ELEMENTARY_SCHOOL_STUDENT
+                OccupationType.ELEMENTARY_SCHOOL_STUDENT
         );
 
         // when
@@ -265,7 +257,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         Long savedId = userService.save(memberCreateRequest);
@@ -273,7 +265,7 @@ class UserServiceTest {
         // when
         MemberUpdateRequest memberUpdateRequest = new MemberUpdateRequest(
                 "희귀닉네임",
-                Occupation.ELEMENTARY_SCHOOL_STUDENT
+                OccupationType.ELEMENTARY_SCHOOL_STUDENT
         );
 
         userService.updateProfile(savedId, memberUpdateRequest);
@@ -282,7 +274,7 @@ class UserServiceTest {
         // then
         Assertions.assertThat(findMember.id()).isEqualTo(savedId);
         Assertions.assertThat(findMember.nickname()).isEqualTo("희귀닉네임");
-        Assertions.assertThat(findMember.occupation()).isEqualTo(Occupation.ELEMENTARY_SCHOOL_STUDENT);
+        Assertions.assertThat(findMember.occupation()).isEqualTo(OccupationType.ELEMENTARY_SCHOOL_STUDENT);
     }
 
     @Test
@@ -294,7 +286,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         Long savedId = userService.save(memberCreateRequest);
@@ -319,7 +311,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         Long savedId = userService.save(memberCreateRequest);
@@ -345,7 +337,7 @@ class UserServiceTest {
                 "naver.com",
                 "password1234",
                 "고투두",
-                Occupation.GENERAL,
+                OccupationType.GENERAL,
                 Role.NORMAL
         );
         Long savedId = userService.save(memberCreateRequest);

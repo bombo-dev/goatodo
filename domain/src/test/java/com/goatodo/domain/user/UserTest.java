@@ -30,7 +30,7 @@ class UserTest {
         // given
         User user = User.builder()
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -55,7 +55,7 @@ class UserTest {
 
         User user = User.builder()
                 .account(account)
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -81,7 +81,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("   ")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -108,7 +108,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname(inputNickname)
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -136,7 +136,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname(inputNickname)
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -185,7 +185,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -209,7 +209,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
 
         // when
@@ -236,7 +236,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.ADMIN)
                 .build();
 
@@ -260,7 +260,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 
@@ -284,7 +284,7 @@ class UserTest {
         User user = User.builder()
                 .account(account)
                 .nickname("봄보")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
 

@@ -1,10 +1,10 @@
 package com.goatodo.domain.tag;
 
-import com.goatodo.domain.user.Account;
-import com.goatodo.domain.user.User;
-import com.goatodo.domain.user.Occupation;
 import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.TagType;
+import com.goatodo.domain.user.Account;
+import com.goatodo.domain.user.OccupationType;
+import com.goatodo.domain.user.User;
 import jakarta.validation.ConstraintViolation;
 import org.assertj.core.api.Assertions;
 import org.hibernate.validator.HibernateValidator;
@@ -40,7 +40,7 @@ class TagTest {
         user = User.builder()
                 .account(account)
                 .nickname("닉네임")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .build();
     }
 

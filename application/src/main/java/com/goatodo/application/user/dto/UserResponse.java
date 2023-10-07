@@ -1,7 +1,7 @@
 package com.goatodo.application.user.dto;
 
 import com.goatodo.common.util.FormatConverter;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.User;
 
 public record UserResponse(
@@ -9,7 +9,7 @@ public record UserResponse(
         String email,
         String password,
         String nickname,
-        Occupation occupation,
+        OccupationType occupationType,
         String createdAt,
         String updatedAt
 ) {
@@ -19,7 +19,7 @@ public record UserResponse(
                 user.getAccount().getEmail(),
                 user.getAccount().getPassword(),
                 user.getNickname(),
-                user.getOccupation(),
+                user.getOccupationType(),
                 FormatConverter.convertLocalDateTimeToString(user.getCreatedAt()),
                 FormatConverter.convertLocalDateTimeToString(user.getUpdatedAt())
         );

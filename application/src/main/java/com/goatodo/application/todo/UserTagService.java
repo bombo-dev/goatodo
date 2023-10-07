@@ -66,7 +66,7 @@ public class UserTagService {
         tag.validRole(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         tag.validOwn(request.userId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
-        tag.changeTag(request.name());
+        tag.changeName(request.name());
     }
 
     @Transactional

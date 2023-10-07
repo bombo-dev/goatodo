@@ -10,19 +10,18 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "occupations")
+@Table(name = "affiliation_type")
 @Entity
-public class Occupation extends BaseEntity {
+public class AffiliationType extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 20, nullable = false, unique = true)
-    private String name;
+    private String type;
 
-    public Occupation(String name) {
-        Objects.requireNonNull(name);
-        this.name = name;
+    public AffiliationType(String type) {
+        Objects.requireNonNull(type);
+        this.type = type;
     }
 }

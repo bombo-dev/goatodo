@@ -4,7 +4,7 @@ import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.TagType;
 import com.goatodo.domain.todo.repository.TagRepository;
 import com.goatodo.domain.user.Account;
-import com.goatodo.domain.user.Occupation;
+import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
 import com.goatodo.domain.user.User;
 import com.goatodo.domain.user.repository.UserRepository;
@@ -41,7 +41,7 @@ class TagRepositoryTest {
         user = User.builder()
                 .account(account)
                 .nickname("닉네임")
-                .occupation(Occupation.GENERAL)
+                .occupation(OccupationType.GENERAL)
                 .role(Role.NORMAL)
                 .build();
     }
