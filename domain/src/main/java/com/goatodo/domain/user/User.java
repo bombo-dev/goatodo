@@ -117,7 +117,7 @@ public class User extends BaseEntity {
     }
 
     public void validLoginInfo(Account account) {
-        if (this.account.isCorrect(account)) {
+        if (!this.account.isCorrect(account)) {
             throw new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED);
         }
     }
