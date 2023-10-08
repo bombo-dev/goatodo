@@ -15,6 +15,13 @@ public final class UserFactory {
                 .build();
     }
 
+    public static Account account(String email, String password) {
+        return Account.builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
+
     public static Level level() {
         return Level.builder()
                 .level(1)
@@ -43,9 +50,26 @@ public final class UserFactory {
                 .build();
     }
 
+    public static Occupation occupation(String occupationName) {
+        return Occupation.builder()
+                .name(occupationName)
+                .build();
+    }
+
     public static User user() {
         return User.builder()
                 .account(account())
+                .level(level())
+                .slackInfo(slackInfo())
+                .occupation(occupation())
+                .nickname("닉네임")
+                .role(Role.NORMAL)
+                .build();
+    }
+
+    public static User user(Account account) {
+        return User.builder()
+                .account(account)
                 .level(level())
                 .slackInfo(slackInfo())
                 .occupation(occupation())
