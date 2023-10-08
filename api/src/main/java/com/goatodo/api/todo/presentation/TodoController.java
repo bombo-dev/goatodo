@@ -19,7 +19,7 @@ public class TodoController {
 
     @PostMapping("/todo")
     public ResponseEntity<Void> createTodo(@Validated @RequestBody TodoCreateRequest todoCreateRequest) {
-        todoService.postTodo(todoCreateRequest);
+        todoService.save(todoCreateRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

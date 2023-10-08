@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,12 +49,17 @@ public class Todo extends BaseEntity {
                 Difficulty difficulty,
                 String description
     ) {
+        Objects.requireNonNull(userId);
+        Objects.requireNonNull(tag);
+        Objects.requireNonNull(title);
+        Objects.requireNonNull(completeStatus);
+        Objects.requireNonNull(difficulty);
         this.userId = userId;
         this.tag = tag;
         this.title = title;
+        this.completeStatus = completeStatus;
         this.difficulty = difficulty;
         this.description = description;
-        this.completeStatus = completeStatus;
     }
 
     public static Todo createTodo(

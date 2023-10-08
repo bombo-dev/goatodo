@@ -2,6 +2,7 @@ package com.goatodo.application.todo.dto;
 
 
 import com.goatodo.common.util.FormatConverter;
+import com.goatodo.domain.todo.Difficulty;
 import com.goatodo.domain.todo.Todo;
 
 public record TodoResponse(
@@ -10,9 +11,9 @@ public record TodoResponse(
         String description,
         String tagName,
         String status,
+        Difficulty difficulty,
         String createdAt,
-        String updatedAt,
-        boolean isActive
+        String updatedAt
 ) {
 
     public TodoResponse(Todo todo) {
@@ -22,9 +23,9 @@ public record TodoResponse(
                 todo.getDescription(),
                 todo.getTag().getName(),
                 todo.getCompleteStatus().getStatusName(),
+                todo.getDifficulty(),
                 FormatConverter.convertLocalDateTimeToString(todo.getCreatedAt()),
-                FormatConverter.convertLocalDateTimeToString(todo.getUpdatedAt()),
-                todo.getIsActive()
+                FormatConverter.convertLocalDateTimeToString(todo.getUpdatedAt())
         );
     }
 }

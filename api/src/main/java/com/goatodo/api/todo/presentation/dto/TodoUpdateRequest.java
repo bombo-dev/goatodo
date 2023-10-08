@@ -1,13 +1,11 @@
 package com.goatodo.api.todo.presentation.dto;
 
+import com.goatodo.domain.todo.Difficulty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record TodoUpdateRequest(
-        @NotNull(message = "todoId는 null 일 수 없습니다.")
-        Long todoId,
-
         @NotNull(message = "memberId는 null 일 수 없습니다.")
         Long memberId,
 
@@ -19,6 +17,9 @@ public record TodoUpdateRequest(
         String title,
 
         @Size(max = 50, message = "Todo의 설명은 50자를 초과 할 수 없습니다.")
-        String description
+        String description,
+
+        @NotNull(message = "난이도는 null 일 수 없습니다.")
+        Difficulty difficulty
 ) {
 }
