@@ -6,7 +6,6 @@ import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
 import com.goatodo.domain.user.exception.InvalidEmailOrPasswordException;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -30,6 +29,10 @@ public class User extends BaseEntity {
     @JoinColumn(name = "level_id", nullable = false)
     private Level level;
 
+    @ManyToOne
+    @JoinColumn(name = "occupation_id", nullable = false)
+    private Occupation occupation;
+
     @OneToOne(optional = true)
     @JoinColumn(name = "slack_info_id")
     private SlackInfo slackInfo;
@@ -45,27 +48,46 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "occupation", nullable = false)
-    private OccupationType occupationType;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
 
     @Builder
-    public User(@NotNull Account account,
-                @NotBlank String nickname,
-                @NotNull OccupationType occupationType,
-                @NotNull Role role) {
+    public User(Level level,
+                Occupation occupation,
+                SlackInfo slackInfo,
+                Account account,
+                String nickname,
+                Role role) {
+        requireNonNull(level);
+        requireNonNull(occupation);
         requireNonNull(account);
         requireNonNull(nickname);
-        requireNonNull(occupationType);
         requireNonNull(role);
+        this.level = level;
+        this.occupation = occupation;
+        this.slackInfo = slackInfo;
         this.account = account;
         this.nickname = nickname;
-        this.occupationType = occupationType;
-        this.role = role;
         this.experience = 0;
+        this.role = role;
+    }
+
+    public static User createUser(
+            Level level,
+            Occupation occupation,
+            SlackInfo slackInfo,
+            Account account,
+            String nickname,
+            Role role
+    ) {
+        return User.builder()
+                .level(level)
+                .occupation(occupation)
+                .account(account)
+                .nickname(nickname)
+                .slackInfo(slackInfo)
+                .role(role)
+                .build();
     }
 
     public void changePassword(String email, String password) {
@@ -74,9 +96,8 @@ public class User extends BaseEntity {
         account = new Account(email, password);
     }
 
-    public void changeProfile(String nickname, OccupationType occupationType) {
+    public void changeProfile(String nickname) {
         this.nickname = nickname;
-        this.occupationType = occupationType;
     }
 
     public void interLockSlack(SlackInfo slackInfo) {

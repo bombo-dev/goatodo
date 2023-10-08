@@ -3,6 +3,7 @@ package com.goatodo.domain.user;
 import com.goatodo.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ public class Occupation extends BaseEntity {
     @Column(name = "name", length = 20, nullable = false, unique = true)
     private String name;
 
+    @Builder
     public Occupation(String name) {
         Objects.requireNonNull(name);
         this.name = name;

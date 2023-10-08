@@ -3,8 +3,11 @@ package com.goatodo.domain.user;
 import com.goatodo.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,4 +24,12 @@ public class Level extends BaseEntity {
 
     @Column(name = "required_experience", nullable = false)
     private Integer requiredExperience;
+
+    @Builder
+    public Level(Integer level, Integer requiredExperience) {
+        Objects.requireNonNull(level);
+        Objects.requireNonNull(requiredExperience);
+        this.level = level;
+        this.requiredExperience = requiredExperience;
+    }
 }
