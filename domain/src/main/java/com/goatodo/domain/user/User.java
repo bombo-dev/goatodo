@@ -4,6 +4,7 @@ import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.DuplicateException;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
+import com.goatodo.domain.todo.Todo;
 import com.goatodo.domain.user.exception.InvalidEmailOrPasswordException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -51,6 +52,9 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @Column(name = "is_level_up", nullable = false)
+    private boolean isLevelUp;
+
     @Builder
     public User(Level level,
                 Occupation occupation,
@@ -90,6 +94,10 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    public boolean getIsLevelUp() {
+        return isLevelUp;
+    }
+
     public void changePassword(String email, String password) {
         validSameEmail(email);
         validDuplicatePassword(password);
@@ -122,11 +130,12 @@ public class User extends BaseEntity {
         }
     }
 
-    public boolean isAdmin() {
-        return role.isAdmin();
-    }
+    public void requireExp(Todo todo) {
+        experience += todo.getExp();
 
-    public boolean isNormal() {
-        return role.isNormal();
+        if (experience >= level.getRequiredExperience()) {
+            experience = experience - level.getRequiredExperience();
+            isLevelUp = true;
+        }
     }
 }

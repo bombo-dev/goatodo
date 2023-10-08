@@ -34,6 +34,7 @@ public final class TodoFactory {
     public static Todo todo(CompleteStatus completeStatus) {
         return Todo.builder()
                 .userId(1L)
+                .tag(tag())
                 .title("제목")
                 .description("내용")
                 .completeStatus(completeStatus)
@@ -44,6 +45,7 @@ public final class TodoFactory {
     public static Todo todo(Difficulty difficulty) {
         return Todo.builder()
                 .userId(1L)
+                .tag(tag())
                 .title("제목")
                 .description("내용")
                 .completeStatus(CompleteStatus.READY)

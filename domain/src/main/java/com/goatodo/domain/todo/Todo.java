@@ -79,6 +79,10 @@ public class Todo extends BaseEntity {
                 .build();
     }
 
+    public int getExp() {
+        return difficulty.getExp();
+    }
+
     public void validOwn(Long userId, ErrorCode errorCode) {
         if (!userId.equals(this.userId)) {
             throw new RoleException(errorCode);
