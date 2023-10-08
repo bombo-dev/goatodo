@@ -89,9 +89,14 @@ public class Todo extends BaseEntity {
         this.tag = todo.getTag();
         this.title = todo.getTitle();
         this.description = todo.getDescription();
+        this.difficulty = todo.getDifficulty();
     }
 
     public void changeCompleteStatus(CompleteStatus completeStatus) {
+        if (this.completeStatus == completeStatus) {
+            throw new IllegalStateException("진행 상태를 같은 상태로 변경 할 수 없습니다. " + completeStatus.getStatusName());
+        }
+
         this.completeStatus = completeStatus;
     }
 }

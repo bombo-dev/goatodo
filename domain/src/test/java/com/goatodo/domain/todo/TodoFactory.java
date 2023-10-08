@@ -13,9 +13,17 @@ public final class TodoFactory {
                 .build();
     }
 
+    public static Tag tag(String name) {
+        return Tag.builder()
+                .userId(1L)
+                .name(name)
+                .build();
+    }
+
     public static Todo todo() {
         return Todo.builder()
                 .userId(1L)
+                .tag(tag())
                 .title("제목")
                 .description("내용")
                 .completeStatus(CompleteStatus.READY)
