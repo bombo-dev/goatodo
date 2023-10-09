@@ -22,14 +22,19 @@ public class Level extends BaseEntity {
     @Column(name = "level", nullable = false)
     private Integer level;
 
+    @Column(name = "pre_experience", nullable = false)
+    private Integer preExperience;
+
     @Column(name = "required_experience", nullable = false)
     private Integer requiredExperience;
 
     @Builder
-    public Level(Integer level, Integer requiredExperience) {
+    public Level(Integer level, Integer preExperience, Integer requiredExperience) {
         Objects.requireNonNull(level);
         Objects.requireNonNull(requiredExperience);
+        Objects.requireNonNull(preExperience);
         this.level = level;
+        this.preExperience = preExperience;
         this.requiredExperience = requiredExperience;
     }
 }

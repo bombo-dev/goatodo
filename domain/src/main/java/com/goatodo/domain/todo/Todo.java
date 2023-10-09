@@ -3,6 +3,7 @@ package com.goatodo.domain.todo;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
+import com.goatodo.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -21,7 +22,9 @@ public class Todo extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    private Long userId;
+    @OneToOne
+    @Column(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
@@ -42,19 +45,19 @@ public class Todo extends BaseEntity {
     private Difficulty difficulty;
 
     @Builder
-    public Todo(Long userId,
+    public Todo(User user,
                 Tag tag,
                 String title,
                 CompleteStatus completeStatus,
                 Difficulty difficulty,
                 String description
     ) {
-        Objects.requireNonNull(userId);
+        Objects.requireNonNull(user);
         Objects.requireNonNull(tag);
         Objects.requireNonNull(title);
         Objects.requireNonNull(completeStatus);
         Objects.requireNonNull(difficulty);
-        this.userId = userId;
+        this.user = user;
         this.tag = tag;
         this.title = title;
         this.completeStatus = completeStatus;
@@ -63,14 +66,14 @@ public class Todo extends BaseEntity {
     }
 
     public static Todo createTodo(
-            Long userId,
+            User user,
             Tag tag,
             String title,
             String description,
             Difficulty difficulty
     ) {
         return Todo.builder()
-                .userId(userId)
+                .user(user)
                 .tag(tag)
                 .title(title)
                 .description(description)
@@ -84,7 +87,7 @@ public class Todo extends BaseEntity {
     }
 
     public void validOwn(Long userId, ErrorCode errorCode) {
-        if (!userId.equals(this.userId)) {
+        if (!userId.equals(user.getId())) {
             throw new RoleException(errorCode);
         }
     }
@@ -101,6 +104,11 @@ public class Todo extends BaseEntity {
             throw new IllegalStateException("진행 상태를 같은 상태로 변경 할 수 없습니다. " + completeStatus.getStatusName());
         }
 
+        if (this.completeStatus == CompleteStatus.COMPLETE) {
+            user.rollbackExp(this);
+        } else if (completeStatus == CompleteStatus.COMPLETE) {
+            user.requireExp(this);
+        }
         this.completeStatus = completeStatus;
     }
 }

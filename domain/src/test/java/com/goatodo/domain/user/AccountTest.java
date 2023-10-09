@@ -18,7 +18,7 @@ public class AccountTest {
 
         // when & then
         Assertions.assertThatThrownBy(() -> {
-            user.validLoginInfo(accountB);
+            user.validMatchPassword(accountB);
         }).isInstanceOf(InvalidEmailOrPasswordException.class);
     }
 
@@ -31,7 +31,7 @@ public class AccountTest {
 
         // when & then
         Assertions.assertThatCode(() -> {
-            user.validLoginInfo(accountA);
+            user.validMatchPassword(accountA);
         }).doesNotThrowAnyException();
     }
 }

@@ -52,8 +52,11 @@ public class User extends BaseEntity {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @Column(name = "is_level_up", nullable = false)
+    @Transient
     private boolean isLevelUp;
+
+    @Transient
+    private boolean isLevelDown;
 
     @Builder
     public User(Level level,
@@ -98,6 +101,11 @@ public class User extends BaseEntity {
         return isLevelUp;
     }
 
+    public boolean getIsLevelDown() {
+        return isLevelDown;
+    }
+
+
     public void changePassword(String email, String password) {
         validSameEmail(email);
         validDuplicatePassword(password);
@@ -112,6 +120,34 @@ public class User extends BaseEntity {
         this.slackInfo = slackInfo;
     }
 
+    public void requireExp(Todo todo) {
+        experience += todo.getExp();
+
+        if (experience >= level.getRequiredExperience()) {
+            experience -= level.getRequiredExperience();
+            isLevelUp = true;
+        }
+    }
+
+    public void rollbackExp(Todo todo) {
+        experience -= todo.getExp();
+
+        if (experience < 0) {
+            experience += level.getPreExperience();
+            isLevelDown = true;
+        }
+    }
+
+    public void changeLevel(Level level) {
+        if (isLevelUp) {
+            isLevelUp = false;
+        } else if (isLevelDown) {
+            isLevelDown = false;
+        }
+
+        this.level = level;
+    }
+
     public void validSameEmail(String email) {
         if (!account.equalsEmail(email)) {
             throw new RoleException(ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
@@ -124,18 +160,9 @@ public class User extends BaseEntity {
         }
     }
 
-    public void validLoginInfo(Account account) {
+    public void validMatchPassword(Account account) {
         if (!this.account.isCorrect(account)) {
             throw new InvalidEmailOrPasswordException(ErrorCode.MEMBER_LOGIN_FAILED);
-        }
-    }
-
-    public void requireExp(Todo todo) {
-        experience += todo.getExp();
-
-        if (experience >= level.getRequiredExperience()) {
-            experience = experience - level.getRequiredExperience();
-            isLevelUp = true;
         }
     }
 }

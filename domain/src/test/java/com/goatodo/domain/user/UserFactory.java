@@ -25,13 +25,15 @@ public final class UserFactory {
     public static Level level() {
         return Level.builder()
                 .level(1)
+                .preExperience(0)
                 .requiredExperience(10)
                 .build();
     }
 
-    public static Level level(int level, int requiredExperience) {
+    public static Level level(int level, int preExperience, int requiredExperience) {
         return Level.builder()
                 .level(level)
+                .preExperience(preExperience)
                 .requiredExperience(requiredExperience)
                 .build();
     }
@@ -60,6 +62,17 @@ public final class UserFactory {
         return User.builder()
                 .account(account())
                 .level(level())
+                .slackInfo(slackInfo())
+                .occupation(occupation())
+                .nickname("닉네임")
+                .role(Role.NORMAL)
+                .build();
+    }
+
+    public static User user(Level level) {
+        return User.builder()
+                .account(account())
+                .level(level)
                 .slackInfo(slackInfo())
                 .occupation(occupation())
                 .nickname("닉네임")
