@@ -6,6 +6,7 @@ import com.goatodo.application.todo.dto.request.TodoServiceCompleteStatusUpdateR
 import com.goatodo.application.todo.dto.request.TodoServiceCreateRequest;
 import com.goatodo.application.todo.dto.request.TodoServiceDeleteRequest;
 import com.goatodo.application.todo.dto.request.TodoServiceUpdateRequest;
+import com.goatodo.application.user.LevelService;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.NotExistIdRequestException;
 import com.goatodo.domain.todo.Tag;
@@ -28,6 +29,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    private final LevelService levelService;
 
     @Transactional
     public Long save(TodoServiceCreateRequest request) {
@@ -38,7 +40,7 @@ public class TodoService {
         Tag tag = tagRepository.findById(request.tagId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        Todo todo = Todo.createTodo(user.getId(), tag, request.title(), request.description(), request.difficulty());
+        Todo todo = Todo.createTodo(user, tag, request.title(), request.description(), request.difficulty());
         Todo savedTodo = todoRepository.save(todo);
         return savedTodo.getId();
     }
@@ -64,8 +66,8 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         todo.validOwn(request.userId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
-
         todo.changeCompleteStatus(request.completeStatus());
+        levelService.changeLevel(request.userId());
     }
 
     @Transactional
@@ -83,7 +85,7 @@ public class TodoService {
         tag.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
         todo.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
-        Todo updateTodo = Todo.createTodo(user.getId(), tag, request.title(), request.description(), request.difficulty());
+        Todo updateTodo = Todo.createTodo(user, tag, request.title(), request.description(), request.difficulty());
         todo.updateTodo(updateTodo);
     }
 
