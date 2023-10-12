@@ -9,6 +9,7 @@ import com.goatodo.application.todo.dto.request.TodoServiceUpdateRequest;
 import com.goatodo.application.user.LevelService;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.NotExistIdRequestException;
+import com.goatodo.domain.todo.CompleteStatus;
 import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.Todo;
 import com.goatodo.domain.todo.repository.TagRepository;
@@ -66,8 +67,12 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
         todo.validOwn(request.userId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
+
+        CompleteStatus before = todo.getCompleteStatus();
         todo.changeCompleteStatus(request.completeStatus());
-        levelService.changeLevel(request.userId());
+        CompleteStatus after = todo.getCompleteStatus();
+
+        levelService.changeExperience(request.userId(), todo.getExp(), before, after);
     }
 
     @Transactional

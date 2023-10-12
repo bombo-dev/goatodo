@@ -2,6 +2,7 @@ package com.goatodo.application.user;
 
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.NotExistIdRequestException;
+import com.goatodo.domain.todo.CompleteStatus;
 import com.goatodo.domain.user.Level;
 import com.goatodo.domain.user.User;
 import com.goatodo.domain.user.repository.LevelRepository;
@@ -20,23 +21,39 @@ public class LevelService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void changeLevel(Long userId) {
+    public void changeExperience(Long userId, int exp, CompleteStatus before, CompleteStatus after) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        if (user.getIsLevelUp()) {
-            Level level = levelRepository.findNextLevelById(user.getLevel().getId())
+        Level level = levelRepository.findById(user.getLevelId())
+                .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
+
+        if (after.isComplete()) {
+            user.requireExp(exp, level.getRequiredExperience());
+        }
+
+        if (before.isComplete()) {
+            user.rollbackExp(exp, level.getPreExperience());
+        }
+
+        changeLevel(user);
+    }
+
+    private void changeLevel(User user) {
+
+        if (user.isLevelUp()) {
+            Level level = levelRepository.findNextLevelById(user.getLevelId())
                     .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-            user.changeLevel(level);
+            user.changeLevel(level.getId());
             return;
         }
 
-        if (user.getIsLevelDown()) {
-            Level level = levelRepository.findPreLevelById(user.getLevel().getId())
+        if (user.isLevelDown()) {
+            Level level = levelRepository.findPreLevelById(user.getLevelId())
                     .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-            user.changeLevel(level);
+            user.changeLevel(level.getId());
         }
     }
 }

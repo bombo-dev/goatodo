@@ -20,4 +20,8 @@ public enum CompleteStatus {
     public int getScore() {
         return score;
     }
+
+    public boolean isComplete() {
+        return this == COMPLETE;
+    }
 }

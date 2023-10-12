@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    @Query("SELECT t FROM Todo t WHERE t.member.id = :memberId")
-    List<Todo> findAllByMember_Id(Long memberId);
+    @Query("SELECT t FROM Todo t WHERE t.userId = :userId")
+    List<Todo> findAllByMember_Id(Long userId);
 
-    @Query("SELECT t FROM Todo t WHERE t.member.id = :memberId AND t.createdAt BETWEEN :startLocalDateTime AND :endLocalDateTime")
-    List<Todo> findAllByMember_idAndDateBetween(Long memberId, LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime);
+    @Query("SELECT t FROM Todo t WHERE t.userId = :userId AND t.createdAt BETWEEN :startLocalDateTime AND :endLocalDateTime")
+    List<Todo> findAllByMember_idAndDateBetween(Long userId, LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime);
 }

@@ -29,7 +29,11 @@ public class Level extends BaseEntity {
     private Integer requiredExperience;
 
     @Builder
-    public Level(Integer level, Integer preExperience, Integer requiredExperience) {
+    private Level(
+            Integer level,
+            Integer preExperience,
+            Integer requiredExperience
+    ) {
         Objects.requireNonNull(level);
         Objects.requireNonNull(requiredExperience);
         Objects.requireNonNull(preExperience);

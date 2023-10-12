@@ -4,7 +4,6 @@ import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.DuplicateException;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
-import com.goatodo.domain.todo.Todo;
 import com.goatodo.domain.user.exception.InvalidEmailOrPasswordException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -26,9 +25,8 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "level_id", nullable = false)
-    private Level level;
+    @Column(name = "level_id", nullable = false)
+    private Long levelId;
 
     @ManyToOne
     @JoinColumn(name = "occupation_id", nullable = false)
@@ -53,24 +51,21 @@ public class User extends BaseEntity {
     private Role role;
 
     @Transient
-    private boolean isLevelUp;
-
-    @Transient
-    private boolean isLevelDown;
+    private LevelStatus levelStatus;
 
     @Builder
-    public User(Level level,
-                Occupation occupation,
-                SlackInfo slackInfo,
-                Account account,
-                String nickname,
-                Role role) {
-        requireNonNull(level);
+    private User(Long levelId,
+                 Occupation occupation,
+                 SlackInfo slackInfo,
+                 Account account,
+                 String nickname,
+                 Role role) {
+        requireNonNull(levelId);
         requireNonNull(occupation);
         requireNonNull(account);
         requireNonNull(nickname);
         requireNonNull(role);
-        this.level = level;
+        this.levelId = levelId;
         this.occupation = occupation;
         this.slackInfo = slackInfo;
         this.account = account;
@@ -80,7 +75,7 @@ public class User extends BaseEntity {
     }
 
     public static User createUser(
-            Level level,
+            Long levelId,
             Occupation occupation,
             SlackInfo slackInfo,
             Account account,
@@ -88,7 +83,7 @@ public class User extends BaseEntity {
             Role role
     ) {
         return User.builder()
-                .level(level)
+                .levelId(levelId)
                 .occupation(occupation)
                 .account(account)
                 .nickname(nickname)
@@ -96,15 +91,6 @@ public class User extends BaseEntity {
                 .role(role)
                 .build();
     }
-
-    public boolean getIsLevelUp() {
-        return isLevelUp;
-    }
-
-    public boolean getIsLevelDown() {
-        return isLevelDown;
-    }
-
 
     public void changePassword(String email, String password) {
         validSameEmail(email);
@@ -120,32 +106,35 @@ public class User extends BaseEntity {
         this.slackInfo = slackInfo;
     }
 
-    public void requireExp(Todo todo) {
-        experience += todo.getExp();
+    public void requireExp(int experience, int requiredExperience) {
+        this.experience += experience;
 
-        if (experience >= level.getRequiredExperience()) {
-            experience -= level.getRequiredExperience();
-            isLevelUp = true;
+        if (this.experience >= requiredExperience) {
+            levelStatus = LevelStatus.LEVEL_UP;
+            this.experience -= requiredExperience;
         }
     }
 
-    public void rollbackExp(Todo todo) {
-        experience -= todo.getExp();
+    public void rollbackExp(int experience, int preExperience) {
+        this.experience -= experience;
 
-        if (experience < 0) {
-            experience += level.getPreExperience();
-            isLevelDown = true;
+        if (this.experience < 0) {
+            levelStatus = LevelStatus.LEVEL_DOWN;
+            this.experience += preExperience;
         }
     }
 
-    public void changeLevel(Level level) {
-        if (isLevelUp) {
-            isLevelUp = false;
-        } else if (isLevelDown) {
-            isLevelDown = false;
-        }
+    public void changeLevel(Long levelId) {
+        this.levelId = levelId;
+        levelStatus = LevelStatus.NORMAL;
+    }
 
-        this.level = level;
+    public boolean isLevelUp() {
+        return levelStatus.isLevelUp();
+    }
+
+    public boolean isLevelDown() {
+        return levelStatus.isLevelDown();
     }
 
     public void validSameEmail(String email) {
