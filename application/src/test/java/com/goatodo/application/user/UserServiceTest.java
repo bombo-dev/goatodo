@@ -1,7 +1,7 @@
 package com.goatodo.application.user;
 
-import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
+import com.goatodo.domain.user.occupation.OccupationType;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

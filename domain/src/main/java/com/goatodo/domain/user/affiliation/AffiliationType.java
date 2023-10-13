@@ -1,4 +1,4 @@
-package com.goatodo.domain.user;
+package com.goatodo.domain.user.affiliation;
 
 import com.goatodo.domain.base.BaseEntity;
 import jakarta.persistence.*;

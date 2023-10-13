@@ -1,6 +1,6 @@
 package com.goatodo.domain.user.repository;
 
-import com.goatodo.domain.user.Level;
+import com.goatodo.domain.user.level.Level;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

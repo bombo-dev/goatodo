@@ -1,6 +1,7 @@
-package com.goatodo.domain.user;
+package com.goatodo.domain.user.affiliation;
 
 import com.goatodo.domain.base.BaseEntity;
+import com.goatodo.domain.user.occupation.Occupation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

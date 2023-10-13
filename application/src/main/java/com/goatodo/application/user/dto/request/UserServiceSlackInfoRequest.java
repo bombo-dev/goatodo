@@ -1,6 +1,6 @@
 package com.goatodo.application.user.dto.request;
 
-import com.goatodo.domain.user.SlackInfo;
+import com.goatodo.domain.user.slackinfo.SlackInfo;
 import lombok.Builder;
 
 import java.time.LocalTime;

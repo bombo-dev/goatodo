@@ -1,4 +1,4 @@
-package com.goatodo.domain.user;
+package com.goatodo.domain.user.occupation;
 
 public enum OccupationType {
     EMPLOYEE("직장인"),

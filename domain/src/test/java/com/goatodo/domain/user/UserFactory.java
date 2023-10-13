@@ -1,5 +1,9 @@
 package com.goatodo.domain.user;
 
+import com.goatodo.domain.user.level.Level;
+import com.goatodo.domain.user.occupation.Occupation;
+import com.goatodo.domain.user.slackinfo.SlackInfo;
+
 import java.time.LocalTime;
 
 public final class UserFactory {

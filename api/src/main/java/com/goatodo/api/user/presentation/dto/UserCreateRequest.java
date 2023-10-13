@@ -1,8 +1,8 @@
 package com.goatodo.api.user.presentation.dto;
 
 import com.goatodo.common.util.RegexPattern;
-import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.Role;
+import com.goatodo.domain.user.occupation.OccupationType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

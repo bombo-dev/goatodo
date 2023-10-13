@@ -5,6 +5,8 @@ import com.goatodo.common.exception.DuplicateException;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
 import com.goatodo.domain.user.exception.InvalidEmailOrPasswordException;
+import com.goatodo.domain.user.occupation.Occupation;
+import com.goatodo.domain.user.slackinfo.SlackInfo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

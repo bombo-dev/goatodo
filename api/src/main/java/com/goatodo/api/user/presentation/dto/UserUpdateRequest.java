@@ -1,6 +1,6 @@
 package com.goatodo.api.user.presentation.dto;
 
-import com.goatodo.domain.user.OccupationType;
+import com.goatodo.domain.user.occupation.OccupationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;

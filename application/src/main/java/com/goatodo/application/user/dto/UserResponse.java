@@ -1,8 +1,8 @@
 package com.goatodo.application.user.dto;
 
 import com.goatodo.common.util.FormatConverter;
-import com.goatodo.domain.user.OccupationType;
 import com.goatodo.domain.user.User;
+import com.goatodo.domain.user.occupation.OccupationType;
 
 public record UserResponse(
         Long id,
