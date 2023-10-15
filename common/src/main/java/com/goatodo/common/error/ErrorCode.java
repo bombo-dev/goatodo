@@ -24,6 +24,7 @@ public enum ErrorCode {
     READ_REQUEST_IS_FORBIDDEN(403, "ROLE-002", "조회 할 수 있는 권한이 없습니다."),
     EDIT_REQUEST_IS_FORBIDDEN(403, "ROLE-003", "수정 할 수 있는 권한이 없습니다."),
     DELETE_REQUEST_IS_FORBIDDEN(403, "ROLE-004", "삭제 할 수 있는 권한이 없습니다."),
+    FORBIDDEN_EXCEPTION(403, "ROLE-005", "권한이 없습니다."),
 
     // INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(500, "SERVER-001", "서버에서 오류가 발생했습니다.");

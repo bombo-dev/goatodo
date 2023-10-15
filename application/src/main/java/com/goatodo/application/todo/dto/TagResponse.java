@@ -1,8 +1,7 @@
 package com.goatodo.application.todo.dto;
 
 
-import com.goatodo.domain.todo.Tag;
-import com.goatodo.domain.todo.TagType;
+import com.goatodo.domain.tag.Tag;
 
 public record TagResponse(
         Long id,

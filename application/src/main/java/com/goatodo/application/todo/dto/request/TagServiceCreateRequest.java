@@ -1,21 +1,17 @@
 package com.goatodo.application.todo.dto.request;
 
-import com.goatodo.domain.todo.Tag;
-import com.goatodo.domain.todo.TagType;
-import com.goatodo.domain.user.User;
+import com.goatodo.domain.tag.Tag;
 import lombok.Builder;
 
 @Builder
 public record TagServiceCreateRequest(
         Long userId,
-        String name,
-        TagType tagType
+        String name
 ) {
-    public Tag toEntity(User user) {
+    public Tag toEntity() {
         return Tag.builder()
-                .user(user)
+                .userId(userId)
                 .name(name())
-                .tagType(tagType())
                 .build();
     }
 }

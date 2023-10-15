@@ -3,6 +3,7 @@ package com.goatodo.domain.todo;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.RoleException;
 import com.goatodo.domain.base.BaseEntity;
+import com.goatodo.domain.tag.Tag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

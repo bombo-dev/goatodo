@@ -9,10 +9,10 @@ import com.goatodo.application.todo.dto.request.TodoServiceUpdateRequest;
 import com.goatodo.application.user.LevelService;
 import com.goatodo.common.error.ErrorCode;
 import com.goatodo.common.exception.NotExistIdRequestException;
+import com.goatodo.domain.tag.Tag;
+import com.goatodo.domain.tag.repository.TagRepository;
 import com.goatodo.domain.todo.CompleteStatus;
-import com.goatodo.domain.todo.Tag;
 import com.goatodo.domain.todo.Todo;
-import com.goatodo.domain.todo.repository.TagRepository;
 import com.goatodo.domain.todo.repository.TodoRepository;
 import com.goatodo.domain.user.User;
 import com.goatodo.domain.user.repository.UserRepository;
@@ -87,7 +87,7 @@ public class TodoService {
         Tag tag = tagRepository.findById(request.tagId())
                 .orElseThrow(() -> new NotExistIdRequestException(ErrorCode.NOT_EXIST_ID_REQUEST));
 
-        tag.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
+        tag.validOwn(user.getId());
         todo.validOwn(user.getId(), ErrorCode.EDIT_REQUEST_IS_FORBIDDEN);
 
         Todo updateTodo = Todo.createTodo(user, tag, request.title(), request.description(), request.difficulty());

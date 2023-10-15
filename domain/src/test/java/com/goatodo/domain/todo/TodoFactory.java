@@ -1,7 +1,6 @@
 package com.goatodo.domain.todo;
 
-import com.goatodo.domain.user.User;
-import com.goatodo.domain.user.UserFactory;
+import com.goatodo.domain.tag.Tag;
 
 public final class TodoFactory {
 
@@ -25,7 +24,7 @@ public final class TodoFactory {
 
     public static Todo todo() {
         return Todo.builder()
-                .user(UserFactory.user())
+                .userId(1L)
                 .tag(tag())
                 .title("제목")
                 .description("내용")
@@ -36,7 +35,7 @@ public final class TodoFactory {
 
     public static Todo todo(CompleteStatus completeStatus) {
         return Todo.builder()
-                .user(UserFactory.user())
+                .userId(1L)
                 .tag(tag())
                 .title("제목")
                 .description("내용")
@@ -47,33 +46,11 @@ public final class TodoFactory {
 
     public static Todo todo(Difficulty difficulty) {
         return Todo.builder()
-                .user(UserFactory.user())
+                .userId(1L)
                 .tag(tag())
                 .title("제목")
                 .description("내용")
                 .completeStatus(CompleteStatus.READY)
-                .difficulty(difficulty)
-                .build();
-    }
-
-    public static Todo todo(User user, Difficulty difficulty) {
-        return Todo.builder()
-                .user(user)
-                .tag(tag())
-                .title("제목")
-                .description("내용")
-                .completeStatus(CompleteStatus.READY)
-                .difficulty(difficulty)
-                .build();
-    }
-
-    public static Todo todo(User user, Difficulty difficulty, CompleteStatus completeStatus) {
-        return Todo.builder()
-                .user(user)
-                .tag(tag())
-                .title("제목")
-                .description("내용")
-                .completeStatus(completeStatus)
                 .difficulty(difficulty)
                 .build();
     }

@@ -1,26 +1,12 @@
 package com.goatodo.application.slack;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.goatodo.domain.todo.repository.TodoRepository;
-import com.goatodo.domain.user.User;
-import com.goatodo.domain.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Slf4j
 public class SlackService {
-
+/*
     private final String DAILY_MESSAGE = "todo 리스트를 작성 할 시간입니다.";
     private final String SLACK_POST_MESSAGE_URL = "https://slack.com/api/chat.postMessage";
     private final String SLACK_FIND_ID_BY_EMAIL = "https://slack.com/api/users.lookupByEmail";
@@ -144,6 +130,5 @@ public class SlackService {
         log.info("JsonObject : {}", userProfile);
         return (String) userProfile.get("id");
     }
-
-
+*/
 }

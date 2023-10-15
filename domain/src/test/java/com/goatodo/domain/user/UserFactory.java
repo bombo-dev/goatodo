@@ -65,18 +65,7 @@ public final class UserFactory {
     public static User user() {
         return User.builder()
                 .account(account())
-                .level(level())
-                .slackInfo(slackInfo())
-                .occupation(occupation())
-                .nickname("닉네임")
-                .role(Role.NORMAL)
-                .build();
-    }
-
-    public static User user(Level level) {
-        return User.builder()
-                .account(account())
-                .level(level)
+                .levelId(1L)
                 .slackInfo(slackInfo())
                 .occupation(occupation())
                 .nickname("닉네임")
@@ -87,7 +76,7 @@ public final class UserFactory {
     public static User user(Account account) {
         return User.builder()
                 .account(account)
-                .level(level())
+                .levelId(1L)
                 .slackInfo(slackInfo())
                 .occupation(occupation())
                 .nickname("닉네임")

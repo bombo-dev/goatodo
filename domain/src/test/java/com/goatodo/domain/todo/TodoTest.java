@@ -1,5 +1,6 @@
 package com.goatodo.domain.todo;
 
+import com.goatodo.domain.tag.Tag;
 import com.goatodo.domain.user.User;
 import com.goatodo.domain.user.UserFactory;
 import org.assertj.core.api.Assertions;
