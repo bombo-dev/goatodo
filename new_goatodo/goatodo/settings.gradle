@@ -1,0 +1,5 @@
+rootProject.name = 'goatodo'
+include 'application'
+include 'common'
+include 'web'
+include 'domain'
