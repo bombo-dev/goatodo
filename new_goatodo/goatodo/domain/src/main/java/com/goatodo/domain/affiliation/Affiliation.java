@@ -21,7 +21,7 @@ public class Affiliation extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "occupation_id")
+    @JoinColumn(name = "occupation_id", nullable = false)
     private Occupation occupation;
 
     @ManyToOne
@@ -31,10 +31,11 @@ public class Affiliation extends BaseEntity {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
+    @Column(name = "year", nullable = false)
     private int year;
 
     @Builder
-    public Affiliation(Occupation occupation, AffiliationType affiliationType, String name, int year) {
+    private Affiliation(Occupation occupation, AffiliationType affiliationType, String name, int year) {
         Objects.requireNonNull(occupation);
         Objects.requireNonNull(affiliationType);
         Objects.requireNonNull(name);

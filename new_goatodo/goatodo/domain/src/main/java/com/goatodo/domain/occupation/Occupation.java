@@ -23,7 +23,7 @@ public class Occupation extends BaseEntity {
     private String name;
 
     @Builder
-    public Occupation(String name) {
+    private Occupation(String name) {
         Objects.requireNonNull(name);
         this.name = name;
     }

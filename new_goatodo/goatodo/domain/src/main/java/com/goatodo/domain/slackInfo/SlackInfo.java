@@ -32,7 +32,7 @@ public class SlackInfo extends BaseEntity {
     private boolean isActive;
 
     @Builder
-    public SlackInfo(String slackEmail, LocalTime startAlarmTime, LocalTime endAlarmTime) {
+    private SlackInfo(String slackEmail, LocalTime startAlarmTime, LocalTime endAlarmTime) {
         this.slackEmail = slackEmail;
         this.startAlarmTime = startAlarmTime;
         this.endAlarmTime = endAlarmTime;

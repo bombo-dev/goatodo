@@ -44,7 +44,7 @@ public class Todo extends BaseEntity {
     private Difficulty difficulty;
 
     @Builder
-    public Todo(Long userId,
+    private Todo(Long userId,
                 Tag tag,
                 String title,
                 CompleteStatus completeStatus,
