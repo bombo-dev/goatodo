@@ -8,6 +8,8 @@ repositories {
     mavenCentral()
 }
 
+bootJar.enabled = false
+
 subprojects {
     group = 'com.goatodo'
     version = '0.0.1-SNAPSHOT'
@@ -49,33 +51,33 @@ configurations {
 // web
 project('web') {
     dependencies {
-        implementation project(':application')
+        compileOnly project(':application')
     }
 }
 
 project('web') {
     dependencies {
-        implementation project(':common')
+        compileOnly project(':common')
     }
 }
 
 // application
 project(':application') {
     dependencies {
-        implementation project(':domain')
+        compileOnly project(':domain')
     }
 }
 
 project(':application') {
     dependencies {
-        implementation project(':common')
+        compileOnly project(':common')
     }
 }
 
 // domain
 project(':domain') {
     dependencies {
-        implementation project(':common')
+        compileOnly project(':common')
     }
 }
 
