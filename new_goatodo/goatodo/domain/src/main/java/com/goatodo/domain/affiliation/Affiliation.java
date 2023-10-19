@@ -31,17 +31,17 @@ public class Affiliation extends BaseEntity {
     @Column(name = "name", length = 30, nullable = false)
     private String name;
 
-    @Column(name = "year", nullable = false)
-    private int year;
+    @Column(name = "years", nullable = false)
+    private int years;
 
     @Builder
-    private Affiliation(Occupation occupation, AffiliationType affiliationType, String name, int year) {
+    private Affiliation(Occupation occupation, AffiliationType affiliationType, String name, int years) {
         Objects.requireNonNull(occupation);
         Objects.requireNonNull(affiliationType);
         Objects.requireNonNull(name);
         this.occupation = occupation;
         this.affiliationType = affiliationType;
         this.name = name;
-        this.year = year;
+        this.years = years;
     }
 }
