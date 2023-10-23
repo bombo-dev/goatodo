@@ -47,7 +47,7 @@ public class Tag extends BaseEntity {
 
     public void validOwn(Long userId) {
         if (!userId.equals(this.userId)) {
-            throw new IllegalStateException(ErrorCode.FORBIDDEN_EXCEPTION.name() + "- userId : " + userId);
+            throw new IllegalStateException(ErrorCode.FORBIDDEN_EXCEPTION.name());
         }
     }
 
