@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum LevelStatus {
-    NORMAL("평상 시"),
+    NORMAL("평시"),
     LEVEL_UP("레벨 업"),
     LEVEL_DOWN("레벨 다운");
 
