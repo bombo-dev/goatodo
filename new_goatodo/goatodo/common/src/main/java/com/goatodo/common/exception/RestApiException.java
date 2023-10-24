@@ -9,7 +9,7 @@ public class RestApiException extends RuntimeException {
     private ErrorCode errorCode;
 
     public RestApiException(ErrorCode errorCode) {
-        super(errorCode.getErrorMessage());
+        super(errorCode.getMessage());
         this.errorCode = errorCode;
     }
 }

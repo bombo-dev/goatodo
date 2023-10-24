@@ -52,6 +52,13 @@ public class Tag extends BaseEntity {
     }
 
     public void update(Tag tag) {
+        validDuplicateName(tag.name);
         this.name = tag.name;
+    }
+
+    private void validDuplicateName(String name) {
+        if (this.name.equals(name)) {
+            throw new IllegalArgumentException(ErrorCode.TAG_DUPLICATE.name());
+        }
     }
 }
