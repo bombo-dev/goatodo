@@ -29,13 +29,13 @@ public enum ErrorCode {
     // INTERNAL_SERVER_ERROR
     INTERNAL_SERVER_ERROR(500, "SERVER-001", "서버에서 오류가 발생했습니다.");
 
-    private final int statusCode;
+    private final int status;
     private final String code;
-    private final String errorMessage;
+    private final String message;
 
-    ErrorCode(int statusCode, String code, String errorMessage) {
-        this.statusCode = statusCode;
+    ErrorCode(int status, String code, String message) {
+        this.status = status;
         this.code = code;
-        this.errorMessage = errorMessage;
+        this.message = message;
     }
 }
